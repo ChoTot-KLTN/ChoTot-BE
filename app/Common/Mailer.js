@@ -7,7 +7,7 @@ const {
 
 const mailHost = "smtp.gmail.com";
 const mailPort = PORT_SEND_MAIL;
-
+console.log(ADMIN_EMAIL +ADMIN_EMAIL_PASSWORD );
 const sendMail = (to, subject, htmlContent) => {
   const transporter = nodeMailer.createTransport({
     service: "gmail",
@@ -30,4 +30,4 @@ const sendMail = (to, subject, htmlContent) => {
   transporter.sendMail(options);
 };
 
-module.exports = sendMail;
+module.exports = {sendMail};
