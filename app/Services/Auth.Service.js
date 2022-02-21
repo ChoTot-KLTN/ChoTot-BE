@@ -176,8 +176,78 @@ const verifydAccount =async (body)=>{
   }
 };
 
+const getOtp = async(query)=>{
+  try {
+      // const {email}=body;
+      const userRegister = await Account.findOne({username:query.email});
+      console.log(query.email)
+      if(!userRegister){
+        return{
+          success: false,
+          message: {
+          ENG: "User not found",
+          VN: "User không tồn tại",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+
+      return{
+        success: true,
+        message:{
+          ENG:"OTP",
+          VN:"Mã OTP của người dùng"
+        },
+        data:userRegister.otp,
+        status: HTTP_STATUS_CODE.OK,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+};
+
+const getAuth = async (idUser)=>{
+  try{
+    const account = await Account.findOne({idUser}).populate("idUser");
+    if(!account){
+      return{
+        success:false,
+        message:{
+          "ENG":"don't find account",
+          "VN":"Không tìm được tài khoản"
+        },
+        status:HTTP_STATUS_CODE.NOT_FOUND
+      };
+    }
+    return {
+      success:true,
+      message:{
+        "ENG":"Get Auth successfully",
+        "VN":"Lấy thông tin người dùng thành công",
+      },
+      data:{
+        user:account.idUser,
+        role:account.role,
+      },
+      status:HTTP_STATUS_CODE.OK,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
 module.exports = {
     register,
     login,
-    verifydAccount
+    verifydAccount,
+    getOtp,
+    getAuth
 }
