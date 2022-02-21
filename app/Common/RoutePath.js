@@ -6,6 +6,7 @@ exports.AUTH_PATH = {
     LOGIN: "login",
     REGISTER: "register",
     VERIFY: "verify",
+    GETOTP:"get-otp"
   };
 
   exports.PREFIX_PATH = {

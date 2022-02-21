@@ -1,6 +1,6 @@
 const { encodedToken } = require("../Middlewares/Token.Middleware");
 const { sendError, sendSuccess } = require("./Controller");
-const {register, login, verifydAccount} = require("../Services/Auth.Service");
+const {register, login, verifydAccount, getOtp, getAuth} = require("../Services/Auth.Service");
 
 const handleRegister = async (req, res) => {
     const result = await register(req.body);
@@ -33,8 +33,28 @@ const handleVerify = async (req,res)=>{
   return sendError(res, result.message, result.status);
 };
 
+const handleGetOTP = async (req,res)=>{
+  const result = await getOtp(req.query);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+};
+
+const handleGetAuth = async (req,res)=>{
+  const token = req.body.token;
+  const result = await getAuth(token.id);
+  console.log(token.id);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+};
+
 module.exports = {
     handleRegister,
     handleLogin,
-    handleVerify
+    handleVerify,
+    handleGetOTP,
+    handleGetAuth
 }

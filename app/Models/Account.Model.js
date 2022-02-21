@@ -8,7 +8,7 @@ const account = {
     isVerified: DEFAULT_MODEL.booleanFalse,
     otp: DEFAULT_MODEL.stringOtp,
     role: DEFAULT_MODEL.string,
-    idUser: DEFAULT_MODEL.stringRequire,
+    idUser:{type:String, required:true, ref:"User"},
     status: { ...DEFAULT_MODEL.stringRequire, default: STATUS.ACTIVE },
 };
 
