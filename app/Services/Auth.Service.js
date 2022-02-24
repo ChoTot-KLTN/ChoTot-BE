@@ -67,6 +67,187 @@ const register = async (body)=>{
     }
 };
 
+const login = async (body)=>{
+    const {email,password} = body;
+    try {
+
+        const account = await Account.findOne({username:email});
+        if(!account){
+            return {
+                message: {
+                  ENG: "Account or password is incorrect",
+                  VN: "Tài khoản hoặc mật khẩu không chính xác",
+                },
+                success: false,
+                status: HTTP_STATUS_CODE.FORBIDDEN,
+              };
+        }
+        const isCorrectPassword = await bcrypt.compare(password,account.password);
+        if(!isCorrectPassword){
+            return{
+                message:{
+                    ENG:"Password is incorrect",
+                    VN:"Sai mật khẩu",
+                },
+                success: false,
+                status: HTTP_STATUS_CODE.NOT_FOUND
+            };
+        }
+        if (account.isVerified === false) {
+            const otp = await generateString(4, false);
+            await sendOtp(account.username, otp);
+            account.otp = otp;
+            await account.save();
+            return {
+              message: {
+                ENG: "Please verify your account. A verify code has been sent to your email",
+                VN: "Hãy kích hoạt tài khoản của bạn. Một mã otp đã được gửi đến email của bạn",
+              },
+              success: false,
+              status: HTTP_STATUS_CODE.UNAUTHORIZED,
+            };
+          }
+          return {
+            message: {
+              ENG: "Login Successfully",
+              VN: "Đăng nhập thành công",
+            },
+            data: {
+              idUser: account.idUser,
+              role: account.role,
+            },
+            success: true,
+            status: HTTP_STATUS_CODE.OK,
+          };
+    }catch(error){
+        return {
+            success: false,
+            message: error.message,
+            status: error.status,
+          };
+    }
+};
+
+const verifydAccount =async (body)=>{
+  try{
+    const {email, otp} = body;
+    const account = await Account.findOne({username:email});
+    if(!account){
+      return {
+        success: false,
+        message: {
+          ENG: "Account not found",
+          VN: "Tài khoản không tồn tại",
+        },
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    if(account.otp === otp)
+    {
+      account.isVerified = true;
+      account.otp = "";
+      await account.save();
+    }
+    if(account.isVerified === true){
+      return {
+        data: "data",
+        success: true,
+        message: {
+          ENG: "Your account is verified",
+          VN: "Tài khoản của bạn đã được kích hoạt",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      success: false,
+      message: {
+        ENG: "Invalid otp",
+        VN: "Mã otp không hợp đúng",
+      },
+      status: HTTP_STATUS_CODE.UNAUTHORIZED,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const getOtp = async(query)=>{
+  try {
+      // const {email}=body;
+      const userRegister = await Account.findOne({username:query.email});
+      console.log(query.email)
+      if(!userRegister){
+        return{
+          success: false,
+          message: {
+          ENG: "User not found",
+          VN: "User không tồn tại",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+
+      return{
+        success: true,
+        message:{
+          ENG:"OTP",
+          VN:"Mã OTP của người dùng"
+        },
+        data:userRegister.otp,
+        status: HTTP_STATUS_CODE.OK,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+};
+
+const getAuth = async (idUser)=>{
+  try{
+    const account = await Account.findOne({idUser}).populate("idUser");
+    if(!account){
+      return{
+        success:false,
+        message:{
+          "ENG":"don't find account",
+          "VN":"Không tìm được tài khoản"
+        },
+        status:HTTP_STATUS_CODE.NOT_FOUND
+      };
+    }
+    return {
+      success:true,
+      message:{
+        "ENG":"Get Auth successfully",
+        "VN":"Lấy thông tin người dùng thành công",
+      },
+      data:{
+        user:account.idUser,
+        role:account.role,
+      },
+      status:HTTP_STATUS_CODE.OK,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
 module.exports = {
-    register
+    register,
+    login,
+    verifydAccount,
+    getOtp,
+    getAuth
 }
