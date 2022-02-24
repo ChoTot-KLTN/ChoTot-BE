@@ -3,8 +3,8 @@ const connectDb = require("./Common/ConnectDb");
 require("dotenv").config();
 const express = require("express");
 const app = express();
- const { PORT } = require("./Common/Config");
- const router = require("./Routes/Index.Route");
+const { PORT } = require("./Common/Config");
+const router = require("./Routes/Index.Route");
 // const paypal = require('./config/paypal');
 
 // app.use(
@@ -18,6 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/Uploads", express.static("Uploads"));
 app.use("/", router);
+app.get("/", (req, res) => {
+  res.send("cccccc");
+});
 // Connect to paypal
 //paypal.connect(process.env.CLIENT_ID,process.env.SECRET_PAYPAL_KEY);
 connectDb();
