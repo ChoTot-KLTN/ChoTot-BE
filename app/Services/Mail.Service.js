@@ -21,7 +21,29 @@ const sendOtp = async (email, otp) => {
       };
     }
   }; //done
+  const sendPassword = async (email, newPassword) => {
+    try {
+      const body = `Đây là mật khẩu mới của bạn: ${newPassword} 
+      Hãy đăng nhập lại và đổi mật khẩu để đảm bảo an toàn`;
+      await sendMail(email, "Quên mật khẩu", body);
+  
+      return {
+        message: "New password has been sent",
+        data: "",
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+      };
+    } catch (error) {
+      return {
+        message: error.message,
+        success: false,
+        status: error.status,
+      };
+    }
+  }; //done
+  
 
   module.exports={
-      sendOtp
+      sendOtp,
+      sendPassword
   }

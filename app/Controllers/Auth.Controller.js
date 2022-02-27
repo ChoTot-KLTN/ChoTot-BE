@@ -1,6 +1,13 @@
 const { encodedToken } = require("../Middlewares/Token.Middleware");
 const { sendError, sendSuccess } = require("./Controller");
-const {register, login, verifydAccount, getOtp, getAuth} = require("../Services/Auth.Service");
+const {register, 
+      login, 
+      verifydAccount, 
+      getOtp, 
+      getAuth,
+      forgotPassword,
+      sendNewPassword,
+      changePassword } = require("../Services/Auth.Service");
 
 const handleRegister = async (req, res) => {
     const result = await register(req.body);
@@ -51,10 +58,37 @@ const handleGetAuth = async (req,res)=>{
   return sendError(res, result.message, result.status);
 };
 
+const handleForgotPassword = async (req,res)=>{
+  const result = await forgotPassword(req.body);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+};
+
+const handleSendNewPass = async (req,res)=>{
+  const result = await sendNewPassword(req.body);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+};
+const handleChangePassword = async (req,res)=>{
+  const { token, oldPassword, newPassword } = req.body;
+  const result = await changePassword(token.id,oldPassword,newPassword);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+};
+
 module.exports = {
     handleRegister,
     handleLogin,
     handleVerify,
     handleGetOTP,
-    handleGetAuth
+    handleGetAuth,
+    handleForgotPassword,
+    handleSendNewPass,
+    handleChangePassword
 }

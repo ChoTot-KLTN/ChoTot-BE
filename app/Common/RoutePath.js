@@ -7,6 +7,7 @@ exports.AUTH_PATH = {
   VERIFY: "verify",
   GETOTP: "get-otp",
   UPDATE_INFO: "update-info",
+  SENDNEWPASS:"send-password"
 };
 
 exports.POST_PATH = {
