@@ -7,12 +7,87 @@ const {
   getPostById,
 } = require("../Services/Post.Service");
 
+const {createPostApartment} = require('../Services/Post_Apartment.Service');
+const {createPostHouse} = require('../Services/Post_House.Service');
+const {createPostGround} = require('../Services/Post_Ground.Service');
+const {createPostOffice} = require('../Services/Post_Office.Service');
+const {createPostMotelRoom} = require('../Services/Post_Room.Service');
+const {createPostPhone} = require('../Services/Post_Phone.Service');
+const {createPostCar} = require('../Services/Post_Car.Service');
+const {createPostMotorbike} = require ('../Services/Post_Motorbike.Service');
+
 const handleCreatePost = async (req, res) => {
-  const result = await createPost(req.body);
+  const token = req.body.token.id;
+  const result = await createPost(token,req.body);
   if (result.success)
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+
+const handleCreatePostApartment = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostApartment(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreatePostHouse = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostHouse(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleCreatePostGround = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostGround(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreatePostOffice = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostOffice(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreateMotelRoom = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostMotelRoom(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreatePhone = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostPhone(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreateCar = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostCar(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleCreateMotorbike = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostMotorbike(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+
 
 const handleGetPostById = async (req, res) => {
   const result = await getPostById(req.query.postId);
@@ -40,4 +115,12 @@ module.exports = {
   handleDeletePost,
   handleGetPostById,
   handleUpdatePost,
+  handleCreatePostApartment,
+  handleCreatePostHouse,
+  handleCreatePostGround,
+  handleCreatePostOffice,
+  handleCreateMotelRoom,
+  handleCreatePhone,
+  handleCreateCar,
+  handleCreateMotorbike,
 };
