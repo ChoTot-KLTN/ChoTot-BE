@@ -19,4 +19,6 @@ router.route(`/${POST_PATH.CREATE_POST_MOTELROOM}`).post([verifyToken],controlle
 router.route(`/${POST_PATH.CREATE_POST_PHONE}`).post([verifyToken],controller.handleCreatePhone);
 router.route(`/${POST_PATH.CREATE_POST_CAR}`).post([verifyToken],controller.handleCreateCar);
 router.route(`/${POST_PATH.CREATE_POST_MOTORBIKE}`).post([verifyToken],controller.handleCreateMotorbike);
+router.route(`/${POST_PATH.CREATE_POST_BICYCLE}`).post([verifyToken],controller.handleCreateBicycle);
+router.route(`/${POST_PATH.CREATE_POST_LAPTOP}`).post([verifyToken],controller.handleCreateLaptop);
 module.exports = router;

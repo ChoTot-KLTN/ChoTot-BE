@@ -8,7 +8,9 @@ const PostOffice = require("./Post_Office.Model");
 const PostMotelRoom = require("./Post_Room.Model");
 const PostPhone = require("./Post_Phone.Model");
 const PostCar = require("./Post_Car.Model");
-const PostMotorbike = require("./Post_Motorbike.Model")
+const PostMotorbike = require("./Post_Motorbike.Model");
+const PostBicycle = require("./Post_Bicycle.Model");
+const PostLaptop = require("./Post_Laptop.Model");
 
 module.exports = {
   Account,
@@ -22,4 +24,6 @@ module.exports = {
   PostPhone,
   PostCar,
   PostMotorbike,
+  PostBicycle,
+  PostLaptop,
 };

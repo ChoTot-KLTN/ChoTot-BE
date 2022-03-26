@@ -15,6 +15,8 @@ const {createPostMotelRoom} = require('../Services/Post_Room.Service');
 const {createPostPhone} = require('../Services/Post_Phone.Service');
 const {createPostCar} = require('../Services/Post_Car.Service');
 const {createPostMotorbike} = require ('../Services/Post_Motorbike.Service');
+const {createPostBicycle} = require('../Services/Post_Bicycle.Service');
+const {createPostLaptop} = require('../Services/Post_Laptop.Service');
 
 const handleCreatePost = async (req, res) => {
   const token = req.body.token.id;
@@ -86,6 +88,21 @@ const handleCreateMotorbike = async (req, res) => {
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+const handleCreateBicycle = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostBicycle(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleCreateLaptop = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await createPostLaptop(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
 
 
 
@@ -123,4 +140,6 @@ module.exports = {
   handleCreatePhone,
   handleCreateCar,
   handleCreateMotorbike,
+  handleCreateBicycle,
+  handleCreateLaptop,
 };
