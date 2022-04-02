@@ -9,7 +9,7 @@ const createPostOffice = async (idUser,body) => {
       const {typePost, type, address, nameOfBuilding, codeBuilding, block, floor,  typeOffice, doorDirection, interiorCondition,
         juridical, area,  price, title, content , image}=body; 
         console.log(idUser);
-        const newPostOffice = new PostOffice({
+        const newPostOffice = await PostOffice.create({
           typePost: typePost,
           type: type,
           address: address,
@@ -25,16 +25,28 @@ const createPostOffice = async (idUser,body) => {
           price:price,
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterOffice: newPostOffice._id,
+          on: newPostOffice._id,
+          onModel:"PostOffice",
           idUserPost:idUser,
         });
-        await newPostOffice.save();
-        await newPost.save();
+
+        // await newPostOffice.save();
+        // await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Office post fail",
+              VN: "Tạo bài đăng cho thuê mặt bằng thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,
@@ -53,4 +65,70 @@ const createPostOffice = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostOffice}
+  const updatePostOffice = async (idPost,body)=> {
+    try{
+      const result = await PostOffice.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostOffice = async (idPost)=> {
+    try{
+      const result = await PostOffice.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostOffice,
+    updatePostOffice,
+    deletePostOffice,}

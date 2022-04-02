@@ -8,7 +8,7 @@ const createPostHouse = async (idUser,body) => {
       ,numberOfBathroom,  doorDirection, juridical, InteriorCondition, area, height,width,  price, title, content , 
       image}=body; 
         console.log(idUser);
-        const newPostHouse = new PostHouse({
+        const newPostHouse = await PostHouse.create({
           typePost:typePost,
           type:type,
           address: address,
@@ -27,16 +27,27 @@ const createPostHouse = async (idUser,body) => {
           price:price,
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterHouse: newPostHouse._id,
+          on: newPostHouse._id,
+          onModel:"PostHouse",
           idUserPost:idUser,
         });
-        await newPostHouse.save();
-        await newPost.save();
+        // await newPostHouse.save();
+        // await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create House post fail",
+              VN: "Tạo bài đăng bán nhà thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,
@@ -55,4 +66,71 @@ const createPostHouse = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostHouse}
+ const updatePostHouse = async (idPost,body)=> {
+  try{
+    const result = await PostHouse.findOneAndUpdate({_id:idPost},body,{new:true,});
+    if(!result)
+    {
+      return {
+        message: {
+          ENG: "Post not find",
+          VN: "Không tìm thấy bài post",
+        },
+        success: false,
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    return {
+      message: {
+        ENG: "Update post successfully",
+        VN: "Cập nhật thông tin bài đăng thành công",
+      },
+      success: true,
+      status: HTTP_STATUS_CODE.OK,
+      data: user,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const deletePostHouse = async (idPost)=> {
+  try{
+    const result = await PostHouse.findOneAndDelete({_id:idPost});
+    if(!result)
+    {
+      return {
+        message: {
+          ENG: "Post not find",
+          VN: "Không tìm thấy bài post",
+        },
+        success: false,
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    return {
+      message: {
+        ENG: "Delete post successfully",
+        VN: "Xóa bài đăng thành công",
+      },
+      success: true,
+      status: HTTP_STATUS_CODE.OK,
+      data: user,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+  module.exports={
+    createPostHouse,
+    updatePostHouse,
+    deletePostHouse,}

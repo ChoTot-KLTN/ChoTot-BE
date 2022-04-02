@@ -3,22 +3,31 @@ const mongoose = require("mongoose");
 const { DEFAULT_MODEL } = require("../Common/Constants");
 const Schema = mongoose.Schema;
 
+
+// status của post:
+// - 0 Đợi duyệt
+// - 1 Chờ thanh toán
+// - 2 Đang hiển thị
+// - 3 Bị từ chối
 const post = {
   title: DEFAULT_MODEL.stringRequire,
   content: DEFAULT_MODEL.stringRequire,
   image: DEFAULT_MODEL.array,
-  idCategory: DEFAULT_MODEL.stringIdMongo,
+  //idCategory: DEFAULT_MODEL.stringIdMongo,
   typePost:DEFAULT_MODEL.string ,
-  idPosterApartment: {type:String, ref: "PostApartment",  default:""}, // ref: "PostApartment",
-  idPosterHouse: {type:String,ref: "Posthouse", default: ""}, //  ref: "Posthouse",
-  idPosterGround: DEFAULT_MODEL.string,
-  idPosterOffice: DEFAULT_MODEL.string,
-  idPosterMotelRoom: DEFAULT_MODEL.string,
-  idPosterCar: DEFAULT_MODEL.string,
-  idPosterMotorBike: DEFAULT_MODEL.string,
-  idPosterElectricBicycle: DEFAULT_MODEL.string,
-  idPosterPhone: DEFAULT_MODEL.string,
-  idPosterlaptop: DEFAULT_MODEL.string,
+  on: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    // Instead of a hardcoded model name in `ref`, `refPath` means Mongoose
+    // will look at the `onModel` property to find the right model.
+    refPath: 'onModel'
+  },
+  onModel: {
+    type: String,
+    required: true,
+    enum: ['PostApartment', 'PostHouse', 'PostGround', 'PostOffice', 'PostMotelRoom', 
+    'PostCar', 'PostMotorbike', 'PostBicycle', 'PostLaptop', 'PostPhone']
+  },
   status: DEFAULT_MODEL.number,
   ratings: { ...DEFAULT_MODEL.number, default: 0 },
   idUserPost: DEFAULT_MODEL.stringIdMongo,

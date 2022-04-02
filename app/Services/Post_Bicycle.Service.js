@@ -8,7 +8,7 @@ const createPostBicycle = async (idUser,body) => {
       const {typePost, type, address, brand, 
         typeBicycle, engine,  statusBicycle, guarantee, price, title, content , image}=body; 
         console.log(idUser);
-        const newPostBicycle= new PostBicycle({
+        const newPostBicycle= await PostBicycle.create({
           typePost:typePost,
           type:type,
           address: address,
@@ -20,16 +20,25 @@ const createPostBicycle = async (idUser,body) => {
           price:price
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterElectricBicycle: newPostBicycle._id,
+          on: newPostBicycle._id,
+          onModel:"PostBicycle",
           idUserPost:idUser,
         });
-        await newPostBicycle.save();
-        await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Electric Bicyle post fail",
+              VN: "Tạo bài đăng xe điện thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,
@@ -48,4 +57,70 @@ const createPostBicycle = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostBicycle}
+  const updatePostBicycle = async (idPost,body)=> {
+    try{
+      const result = await PostBicycle.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostBicycle = async (idPost)=> {
+    try{
+      const result = await PostBicycle.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostBicycle,
+    updatePostBicycle,
+    deletePostBicycle,}

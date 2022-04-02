@@ -8,7 +8,7 @@ const createPostLaptop = async (idUser,body) => {
       const {typePost, address, brand, color, microprocessor, ram, hardDrive, typeHardDrive, graphicsCard, 
         statusLaptop, guarantee, price, title, content , image}=body; 
         console.log(idUser);
-        const newPostPhone = new PostLaptop({
+        const newPostPhone = await PostLaptop.create({
           typePost:typePost,
           address: address,
           brand:brand,
@@ -23,22 +23,33 @@ const createPostLaptop = async (idUser,body) => {
           price:price,
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterlaptop: newPostPhone._id,
+          on: newPostPhone._id,
+          onModel:"PostLaptop",
           idUserPost:idUser,
         });
-        await newPostPhone.save();
-        await newPost.save();
+        // await newPostPhone.save();
+        // await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Laptop post fail",
+              VN: "Tạo bài đăng bán laptop thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,
           message: {
-            ENG: "Create Phone post successfully",
-            VN: "Tạo bài đăng bán điện thoại thành công",
+            ENG: "Create Laptop post successfully",
+            VN: "Tạo bài đăng bán laptop thành công",
           },
           status: HTTP_STATUS_CODE.OK,
         };
@@ -51,4 +62,70 @@ const createPostLaptop = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostLaptop}
+  const updatePostLaptop = async (idPost,body)=> {
+    try{
+      const result = await PostLaptop.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostLaptop = async (idPost)=> {
+    try{
+      const result = await PostLaptop.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostLaptop,
+    updatePostLaptop,
+    deletePostLaptop,}

@@ -8,7 +8,7 @@ const createPostGround = async (idUser,body) => {
       const {typePost, type, address, typeGround, groundDirection,
         juridical, area, height, width,  price, title, content , image}=body; 
         console.log(idUser);
-        const newPostGround = new PostGround({
+        const newPostGround = await PostGround.create({
           typePost:typePost,
           type:type,
           address: address,
@@ -21,16 +21,25 @@ const createPostGround = async (idUser,body) => {
           price:price,
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterGround: newPostGround._id,
+          on: newPostGround._id,
+          onModel:"PostGround",
           idUserPost:idUser,
         });
-        await newPostGround.save();
-        await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Ground post fail",
+              VN: "Tạo bài đăng bán đất thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,
@@ -49,4 +58,70 @@ const createPostGround = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostGround}
+  const updatePostGround = async (idPost,body)=> {
+    try{
+      const result = await PostGround.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostGround = async (idPost)=> {
+    try{
+      const result = await PostGround.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostGround,
+    updatePostGround,
+    deletePostGround,}

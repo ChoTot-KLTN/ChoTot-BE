@@ -6,7 +6,7 @@ const createPostMotelRoom = async (idUser,body) => {
     try {
       const {typePost, type, address, interiorCondition, area, price, deposit, title, content , image}=body; 
         console.log(idUser);
-        const newPostMotelRoom = new PostMotelRoom({
+        const newPostMotelRoom = await PostMotelRoom.create({
           typePost:typePost,
           type:type,
           address: address,
@@ -16,16 +16,17 @@ const createPostMotelRoom = async (idUser,body) => {
           deposit:deposit,
         });
   
-        const newPost = new Post({
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterMotelRoom: newPostMotelRoom._id,
+          on: newPostMotelRoom._id,
+          onModel:"PostMotelRoom",
           idUserPost:idUser,
         });
-        await newPostMotelRoom.save();
-        await newPost.save();
+        // await newPostMotelRoom.save();
+        // await newPost.save();
         return {
           data: "data",
           success: true,
@@ -44,4 +45,70 @@ const createPostMotelRoom = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostMotelRoom}
+  const updatePostMotelRoom = async (idPost,body)=> {
+    try{
+      const result = await PostMotelRoom.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostMotelRoom = async (idPost)=> {
+    try{
+      const result = await PostMotelRoom.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostMotelRoom,
+    updatePostMotelRoom,
+    deletePostMotelRoom,}

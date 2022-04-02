@@ -1,14 +1,17 @@
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
+const { findOneAndUpdate } = require("../Models/Account.Model");
 const { Post, PostApartment } = require("../Models/Index.Model");
+const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
+const { result } = require("@hapi/joi/lib/base");
 
 const createPostApartment = async (idUser,body) => {
     try {
       const {typePost, type, nameOfBuilding, address, codeBuilding, block, floor, typeBuilding, numberOfBedroom
       ,numberOfBathroom, balconyDirection, doorDirection, juridical, InteriorCondition, area, price, title, content , 
       image}=body; 
-        console.log(idUser);
-        const newPostApartment = new PostApartment({
+        const newPostApartment = await PostApartment.create({
           typePost:typePost,
           type:type,
           nameOfBuilding: nameOfBuilding,
@@ -26,17 +29,28 @@ const createPostApartment = async (idUser,body) => {
           area: area,
           price:price,
         });
-  
-        const newPost = new Post({
+        //const results =  await newPostApartment.save();
+        const newPost = await Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterApartment: newPostApartment._id,
           idUserPost:idUser,
+          on: newPostApartment._id,
+          onModel: 'PostApartment'
         });
-        await newPostApartment.save();
-        await newPost.save();
+
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Apartment post fail",
+              VN: "Tạo bài đăng chung cư thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
+     
         return {
           data: "data",
           success: true,
@@ -55,4 +69,70 @@ const createPostApartment = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostApartment}
+  const updatePostApartment = async (idPost,body)=> {
+    try{
+      const result = await PostApartment.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostApartment = async (idPost)=> {
+    try{
+      const result = await PostApartment.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostApartment,
+    updatePostApartment,
+    deletePostApartment};

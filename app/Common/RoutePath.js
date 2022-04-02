@@ -25,6 +25,8 @@ exports.POST_PATH = {
   CREATE_POST_MOTORBIKE: "create-post-motorbike",
   CREATE_POST_BICYCLE: "create-post-bicycle",
   CREATE_POST_LAPTOP: "create-post-laptop",
+  GET_LIST_POST: "get-list-post",
+  GET_ALL_POST: "get-all-post",
 };
 
 exports.PREFIX_PATH = {

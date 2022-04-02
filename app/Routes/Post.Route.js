@@ -7,9 +7,9 @@ const { validateBody } = require("../Validations/Validation");
 const { verifyToken } = require("../Middlewares/Token.Middleware");
 
 router.route(`/${POST_PATH.CREATE_POST}`).post([verifyToken],controller.handleCreatePost);
-router.route(`/${POST_PATH.DELETE_POST}`).delete(controller.handleDeletePost);
+router.route(`/${POST_PATH.DELETE_POST}`).delete([verifyToken],controller.handleDeletePost);
 router.route(`/${POST_PATH.FIND_POST}`).get(controller.handleGetPostById);
-router.route(`/${POST_PATH.UPDATE_POST}`).put(controller.handleUpdatePost);
+router.route(`/${POST_PATH.UPDATE_POST}`).put([verifyToken],controller.handleUpdatePost);
 
 router.route(`/${POST_PATH.CREATE_POST_Apartment}`).post([verifyToken],controller.handleCreatePostApartment);
 router.route(`/${POST_PATH.CREATE_POST_HOUSE}`).post([verifyToken],controller.handleCreatePostHouse);
@@ -21,4 +21,6 @@ router.route(`/${POST_PATH.CREATE_POST_CAR}`).post([verifyToken],controller.hand
 router.route(`/${POST_PATH.CREATE_POST_MOTORBIKE}`).post([verifyToken],controller.handleCreateMotorbike);
 router.route(`/${POST_PATH.CREATE_POST_BICYCLE}`).post([verifyToken],controller.handleCreateBicycle);
 router.route(`/${POST_PATH.CREATE_POST_LAPTOP}`).post([verifyToken],controller.handleCreateLaptop);
+router.route(`/${POST_PATH.GET_LIST_POST}`).get([verifyToken],controller.handleGetListPostByUser);
+router.route(`/${POST_PATH.GET_ALL_POST}`).get(controller.handleGetListPost);
 module.exports = router;

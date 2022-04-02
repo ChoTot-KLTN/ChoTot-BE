@@ -30,4 +30,4 @@ const postHouse = {
     price: DEFAULT_MODEL.number,
 };
 
-module.exports = PostHouse = mongoose.model("Posthouse", createSchema(postHouse));
+module.exports = PostHouse = mongoose.model("PostHouse", createSchema(postHouse));

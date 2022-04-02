@@ -5,8 +5,8 @@ const { Post, PostPhone  } = require("../Models/Index.Model");
 const createPostPhone = async (idUser,body) => {
     try {
       const {typePost, address, brand, color, ram, statusPhone, price, title, content , image}=body; 
-        console.log(idUser);
-        const newPostPhone = new PostPhone({
+        
+        const newPostPhone = await PostPhone.create({
           typePost:typePost,
           address: address,
           brand:brand,
@@ -16,16 +16,28 @@ const createPostPhone = async (idUser,body) => {
           price:price,
         });
   
-        const newPost = new Post({
+        const newPost =  Post.create({
           title: title,
           content:content,
           image:image,
           typePost:typePost,
-          idPosterPhone: newPostPhone._id,
+          //idPosterPhone: newPostPhone._id,
+          on: newPostPhone._id,
+          onModel: 'PostPhone',
           idUserPost:idUser,
         });
-        await newPostPhone.save();
-        await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Phone post fail",
+              VN: "Tạo bài đăng phone thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
+        // await newPostPhone.save();
+        // await newPost.save();
         return {
           data: "data",
           success: true,
@@ -44,4 +56,70 @@ const createPostPhone = async (idUser,body) => {
     }
   };
 
-  module.exports={createPostPhone}
+  const updatePostPhone = async (idPost,body)=> {
+    try{
+      const result = await PostPhone.findOneAndUpdate({_id:idPost},body,{new:true,});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Update post successfully",
+          VN: "Cập nhật thông tin bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+  const deletePostPhone = async (idPost)=> {
+    try{
+      const result = await PostPhone.findOneAndDelete({_id:idPost});
+      if(!result)
+      {
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {
+        message: {
+          ENG: "Delete post successfully",
+          VN: "Xóa bài đăng thành công",
+        },
+        success: true,
+        status: HTTP_STATUS_CODE.OK,
+        data: user,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  };
+
+  module.exports={
+    createPostPhone,
+    updatePostPhone,
+    deletePostPhone,}

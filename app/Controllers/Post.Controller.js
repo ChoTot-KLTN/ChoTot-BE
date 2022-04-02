@@ -5,6 +5,8 @@ const {
   deletePost,
   updatePost,
   getPostById,
+  getListPost,
+  getAllPost,
 } = require("../Services/Post.Service");
 
 const {createPostApartment} = require('../Services/Post_Apartment.Service');
@@ -103,8 +105,20 @@ const handleCreateLaptop = async (req, res) => {
   return sendError(res, result.message, result.status);
 };
 
+const handleGetListPostByUser= async (req, res) => {
+  const token = req.body.token.id;
+  const result = await getListPost(token,req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 
-
+const handleGetListPost= async (req, res) => {
+  const result = await getAllPost(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 
 const handleGetPostById = async (req, res) => {
   const result = await getPostById(req.query.postId);
@@ -121,7 +135,8 @@ const handleUpdatePost = async (req, res) => {
 };
 
 const handleDeletePost = async (req, res) => {
-  const result = await deletePost(req.query.postId);
+  const token = req.body.token.id;
+  const result = await deletePost(token,req.query.postId);
   if (result.success)
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
@@ -142,4 +157,6 @@ module.exports = {
   handleCreateMotorbike,
   handleCreateBicycle,
   handleCreateLaptop,
+  handleGetListPostByUser,
+  handleGetListPost,
 };

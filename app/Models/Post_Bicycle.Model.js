@@ -18,7 +18,7 @@ const postBicycle = {
     typeBicycle: DEFAULT_MODEL.string,
     engine: DEFAULT_MODEL.string,
     statusBicycle: DEFAULT_MODEL.string,
-    guarantee: DEFAULT_MODEL.number,
+    guarantee: DEFAULT_MODEL.string,
     price: DEFAULT_MODEL.number,
 };
 
