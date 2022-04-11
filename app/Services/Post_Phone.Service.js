@@ -2,8 +2,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostPhone  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostPhone = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, address, brand, color, ram, statusPhone, price, title, content , image}=body; 
         
         const newPostPhone = await PostPhone.create({
@@ -25,6 +31,8 @@ const createPostPhone = async (idUser,body) => {
           on: newPostPhone._id,
           onModel: 'PostPhone',
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         if(!newPost){
           return {
@@ -118,8 +126,33 @@ const createPostPhone = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostPhone = async(idPost)=> {
+    try{
+      const result = await PostPhone.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostPhone,
     updatePostPhone,
-    deletePostPhone,}
+    deletePostPhone,
+    getDetailPostPhone,}

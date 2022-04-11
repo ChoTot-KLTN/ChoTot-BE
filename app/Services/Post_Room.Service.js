@@ -2,8 +2,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostMotelRoom  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostMotelRoom = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, interiorCondition, area, price, deposit, title, content , image}=body; 
         console.log(idUser);
         const newPostMotelRoom = await PostMotelRoom.create({
@@ -24,6 +30,8 @@ const createPostMotelRoom = async (idUser,body) => {
           on: newPostMotelRoom._id,
           onModel:"PostMotelRoom",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         // await newPostMotelRoom.save();
         // await newPost.save();
@@ -107,8 +115,33 @@ const createPostMotelRoom = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostMotelRoom = async(idPost)=> {
+    try{
+      const result = await PostMotelRoom.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostMotelRoom,
     updatePostMotelRoom,
-    deletePostMotelRoom,}
+    deletePostMotelRoom,
+    getDetailPostMotelRoom,}

@@ -22,5 +22,8 @@ router.route(`/${POST_PATH.CREATE_POST_MOTORBIKE}`).post([verifyToken],controlle
 router.route(`/${POST_PATH.CREATE_POST_BICYCLE}`).post([verifyToken],controller.handleCreateBicycle);
 router.route(`/${POST_PATH.CREATE_POST_LAPTOP}`).post([verifyToken],controller.handleCreateLaptop);
 router.route(`/${POST_PATH.GET_LIST_POST}`).get([verifyToken],controller.handleGetListPostByUser);
-router.route(`/${POST_PATH.GET_ALL_POST}`).get(controller.handleGetListPost);
+router.route(`/${POST_PATH.GET_ALL_POST}`).get(controller.handleGetListPost); 
+router.route(`/${POST_PATH.GET_DETAIL_POST}`).get(controller.handleGetDetailPost);
+
+
 module.exports = router;

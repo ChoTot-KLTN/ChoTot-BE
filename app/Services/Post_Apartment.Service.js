@@ -6,11 +6,20 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const { result } = require("@hapi/joi/lib/base");
 
+
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostApartment = async (idUser,body) => {
     try {
       const {typePost, type, nameOfBuilding, address, codeBuilding, block, floor, typeBuilding, numberOfBedroom
       ,numberOfBathroom, balconyDirection, doorDirection, juridical, InteriorCondition, area, price, title, content , 
       image}=body; 
+
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
+          
         const newPostApartment = await PostApartment.create({
           typePost:typePost,
           type:type,
@@ -37,7 +46,9 @@ const createPostApartment = async (idUser,body) => {
           typePost:typePost,
           idUserPost:idUser,
           on: newPostApartment._id,
-          onModel: 'PostApartment'
+          onModel: 'PostApartment',
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
 
         if(!newPost){
@@ -132,7 +143,33 @@ const createPostApartment = async (idUser,body) => {
     }
   };
 
+  const getDetailPostApartment = async(idPost)=> {
+    try{
+      const result = await PostApartment.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
+
   module.exports={
     createPostApartment,
     updatePostApartment,
-    deletePostApartment};
+    deletePostApartment,
+    getDetailPostApartment,};

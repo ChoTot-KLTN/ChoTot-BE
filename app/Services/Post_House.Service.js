@@ -2,8 +2,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostApartment, PostHouse } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostHouse = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, codeHouse, block, numberOfFloor, typeHouse, numberOfBedroom
       ,numberOfBathroom,  doorDirection, juridical, InteriorCondition, area, height,width,  price, title, content , 
       image}=body; 
@@ -35,6 +41,8 @@ const createPostHouse = async (idUser,body) => {
           on: newPostHouse._id,
           onModel:"PostHouse",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         // await newPostHouse.save();
         // await newPost.save();
@@ -129,8 +137,33 @@ const deletePostHouse = async (idPost)=> {
     };
   }
 };
+const getDetailPostHouse = async(idPost)=> {
+  try{
+    const result = await PostHouse.findOne({_id:idPost});
+    if(!result){
+      return {
+        message: {
+          ENG: "Post not find",
+          VN: "Không tìm thấy bài post",
+        },
+        success: false,
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    return {  
+      data: result,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
 
   module.exports={
     createPostHouse,
     updatePostHouse,
-    deletePostHouse,}
+    deletePostHouse,
+    getDetailPostHouse,}

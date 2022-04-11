@@ -3,8 +3,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostMotorbike  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostMotorbike = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, brand, yearOfRegistration,
         typeMotorbike, capacity,  statusMotorbike, numberOfKm, price, title, content , image}=body; 
         console.log(idUser);
@@ -29,6 +35,8 @@ const createPostMotorbike = async (idUser,body) => {
           on: newPostMotorbike._id,
           onModel:"PostMotorbike",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         // await newPostMotorbike.save();
         // await newPost.save();
@@ -121,8 +129,33 @@ const createPostMotorbike = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostMotorbike = async(idPost)=> {
+    try{
+      const result = await PostMotorbike.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostMotorbike,
     updatePostMotorbike,
-    deletePostMotobike,}
+    deletePostMotobike,
+    getDetailPostMotorbike,}

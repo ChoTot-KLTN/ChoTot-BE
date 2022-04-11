@@ -3,8 +3,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostBicycle  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostBicycle = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, brand, 
         typeBicycle, engine,  statusBicycle, guarantee, price, title, content , image}=body; 
         console.log(idUser);
@@ -28,6 +34,8 @@ const createPostBicycle = async (idUser,body) => {
           on: newPostBicycle._id,
           onModel:"PostBicycle",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         if(!newPost){
           return {
@@ -119,8 +127,33 @@ const createPostBicycle = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostBicycle = async(idPost)=> {
+    try{
+      const result = await PostBicycle.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostBicycle,
     updatePostBicycle,
-    deletePostBicycle,}
+    deletePostBicycle,
+    getDetailPostBicycle,}
