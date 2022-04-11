@@ -27,6 +27,7 @@ exports.POST_PATH = {
   CREATE_POST_LAPTOP: "create-post-laptop",
   GET_LIST_POST: "get-list-post",
   GET_ALL_POST: "get-all-post",
+  GET_DETAIL_POST: "get-detail-post",
 };
 
 exports.PREFIX_PATH = {

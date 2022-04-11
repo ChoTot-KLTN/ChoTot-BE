@@ -40,8 +40,8 @@ const post = {
   timeEndAdvert: DEFAULT_MODEL.date,
   // isVehicleInspection: DEFAULT_MODEL.boolean,
   totalPrice: DEFAULT_MODEL.number,
-  dateStartPoster: DEFAULT_MODEL.date,
-  dateEndPoster: DEFAULT_MODEL.date,
+  dateStartPost: DEFAULT_MODEL.date,
+  dateEndPost: DEFAULT_MODEL.date,
 };
 
 module.exports = Post = mongoose.model("Post", createSchema(post));

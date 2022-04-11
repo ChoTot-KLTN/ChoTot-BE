@@ -7,6 +7,7 @@ const {
   getPostById,
   getListPost,
   getAllPost,
+  getDetailPost,
 } = require("../Services/Post.Service");
 
 const {createPostApartment} = require('../Services/Post_Apartment.Service');
@@ -142,6 +143,14 @@ const handleDeletePost = async (req, res) => {
   return sendError(res, result.message, result.status);
 };
 
+const handleGetDetailPost = async (req, res) => {
+  
+  const result = await getDetailPost(req.query.postId);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -159,4 +168,5 @@ module.exports = {
   handleCreateLaptop,
   handleGetListPostByUser,
   handleGetListPost,
+  handleGetDetailPost
 };

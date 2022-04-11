@@ -3,8 +3,15 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostGround  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
+
 const createPostGround = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, typeGround, groundDirection,
         juridical, area, height, width,  price, title, content , image}=body; 
         console.log(idUser);
@@ -29,6 +36,8 @@ const createPostGround = async (idUser,body) => {
           on: newPostGround._id,
           onModel:"PostGround",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         if(!newPost){
           return {
@@ -120,8 +129,33 @@ const createPostGround = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostGround = async(idPost)=> {
+    try{
+      const result = await PostGround.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostGround,
     updatePostGround,
-    deletePostGround,}
+    deletePostGround,
+    getDetailPostGround,}

@@ -2,8 +2,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post, PostCar  } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostCar = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, brand, yearOfManufacture,
         carGearbox, fuel, numberOfSeat, color,  statusCar, numberOfKm, price, title, content , image}=body; 
         console.log(idUser);
@@ -30,6 +36,8 @@ const createPostCar = async (idUser,body) => {
           on: newPostCar._id,
           onModel:"PostCar",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
         // await newPostCar.save();
         // await newPost.save();
@@ -123,8 +131,33 @@ const createPostCar = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostCar = async(idPost)=> {
+    try{
+      const result = await PostCar.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostCar,
     updatePostCar,
-    deletePostCar,}
+    deletePostCar,
+    getDetailPostCar,}

@@ -4,8 +4,14 @@
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { Post , PostOffice } = require("../Models/Index.Model");
 
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
 const createPostOffice = async (idUser,body) => {
     try {
+      let now = new Date();
+      let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, nameOfBuilding, codeBuilding, block, floor,  typeOffice, doorDirection, interiorCondition,
         juridical, area,  price, title, content , image}=body; 
         console.log(idUser);
@@ -33,6 +39,8 @@ const createPostOffice = async (idUser,body) => {
           on: newPostOffice._id,
           onModel:"PostOffice",
           idUserPost:idUser,
+          dateStartPost: now,
+          dateEndPost: dateEnd,
         });
 
         // await newPostOffice.save();
@@ -127,8 +135,33 @@ const createPostOffice = async (idUser,body) => {
       };
     }
   };
+  const getDetailPostOffice = async(idPost)=> {
+    try{
+      const result = await PostOffice.findOne({_id:idPost});
+      if(!result){
+        return {
+          message: {
+            ENG: "Post not find",
+            VN: "Không tìm thấy bài post",
+          },
+          success: false,
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
+      return {  
+        data: result,
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+        status: error.status,
+      };
+    }
+  }
 
   module.exports={
     createPostOffice,
     updatePostOffice,
-    deletePostOffice,}
+    deletePostOffice,
+    getDetailPostOffice,}
