@@ -9,6 +9,7 @@ exports.AUTH_TYPE = {
 exports.DEFAULT_MODEL = {
   date: { type: Date },
   string: { type: String, default: "" },
+  stringNum: {type: String,default: "1"},
   stringRequire: { type: String, required: true, default: "" },
   stringIdMongo: { type: String, match: REGEX.ID_MONGO, default: null },
   stringPhone: {
