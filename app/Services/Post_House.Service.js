@@ -43,6 +43,8 @@ const createPostHouse = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostHouse.price,
+          province: newPostHouse.address.province,
         });
         // await newPostHouse.save();
         // await newPost.save();

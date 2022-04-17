@@ -33,6 +33,8 @@ const createPostPhone = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostPhone.price,
+          province: newPostPhone.address.province,
         });
         if(!newPost){
           return {
