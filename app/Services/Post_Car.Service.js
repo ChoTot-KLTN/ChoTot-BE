@@ -38,6 +38,8 @@ const createPostCar = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostCar.price,
+          province: newPostCar.address.province,
         });
         // await newPostCar.save();
         // await newPost.save();

@@ -38,6 +38,8 @@ const createPostGround = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostGround.price,
+          province: newPostGround.address.province,
         });
         if(!newPost){
           return {

@@ -36,6 +36,8 @@ const createPostBicycle = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostBicycle.price,
+          province: newPostBicycle.address.province,
         });
         if(!newPost){
           return {
