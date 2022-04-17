@@ -7,7 +7,7 @@ exports.AUTH_PATH = {
   VERIFY: "verify",
   GETOTP: "get-otp",
   UPDATE_INFO: "update-info",
-  SENDNEWPASS:"send-password"
+  SENDNEWPASS: "send-password",
 };
 
 exports.POST_PATH = {
@@ -30,9 +30,20 @@ exports.POST_PATH = {
   GET_DETAIL_POST: "get-detail-post",
 };
 
+exports.CONVERSATION_PATH = {
+  CREATE_CONVERSATION: "create-conversation",
+  GET_CONVERSATION: "get-conversation",
+};
+exports.MESSAGE_PATH = {
+  CREATE_MESSAGE: "create-message",
+  GET_MESSAGE: "get-message",
+};
+
 exports.PREFIX_PATH = {
   ADMIN: "admin",
   AUTH: "auth",
   USER: "user",
   POST: "post",
+  CONVERSATION: "conversation",
+  MESSAGE: "message",
 };

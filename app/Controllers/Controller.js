@@ -4,6 +4,7 @@ const sendSuccess = (res, data = {}, message, status = HTTP_STATUS_CODE.OK) => {
   return res.status(status).json({
     message: message || "success",
     data: data,
+    status: status,
   });
 };
 
@@ -14,6 +15,7 @@ const sendError = (
 ) => {
   return res.status(status).json({
     message: message || "Internal server error",
+    status: status,
   });
 };
 

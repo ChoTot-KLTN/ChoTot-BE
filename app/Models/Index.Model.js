@@ -11,6 +11,8 @@ const PostCar = require("./Post_Car.Model");
 const PostMotorbike = require("./Post_Motorbike.Model");
 const PostBicycle = require("./Post_Bicycle.Model");
 const PostLaptop = require("./Post_Laptop.Model");
+const Message = require("./Message.Model");
+const Conversation = require("./Conversation.Model");
 
 module.exports = {
   Account,
@@ -26,4 +28,6 @@ module.exports = {
   PostMotorbike,
   PostBicycle,
   PostLaptop,
+  Message,
+  Conversation
 };
