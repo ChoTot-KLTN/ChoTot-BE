@@ -4,29 +4,24 @@ const { send } = require("express/lib/response");
 
 const createConversation = async (body) => {
   try {
-    console.log(body);
+    const senderId = body.senderId;
+    const receiveId = body.receiveId;
+    const conversationId =
+      senderId.localeCompare(receiveId) === 1
+        ? senderId + receiveId
+        : receiveId + senderId;
+    const conversation = await Conversation.findOne({
+      _id: conversationId,
+    });
+    if (conversation) {
+      return conversation;
+    }
+
     const data = {
+      _id: conversationId,
       members: [body.senderId, body.receiveId],
     };
-    const conversation = await Conversation.create(data);
-    if (conversation) {
-      return {
-        success: true,
-        message: {
-          ENG: "Conversation created",
-          VN: "Tao thành công",
-        },
-        status: HTTP_STATUS_CODE.OK,
-      };
-    }
-    return {
-      success: false,
-      message: {
-        ENG: "Failed",
-        VN: "That bai",
-      },
-      status: HTTP_STATUS_CODE.BAD_REQUEST,
-    };
+    return await Conversation.create(data);
   } catch (error) {
     return {
       success: false,

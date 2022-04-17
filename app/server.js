@@ -5,6 +5,15 @@ const express = require("express");
 const app = express();
 const { PORT } = require("./Common/Config");
 const router = require("./Routes/Index.Route");
+const Socket = require("./socket");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    method: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
+Socket(io);
 // const paypal = require('./config/paypal');
 
 // app.use(
@@ -25,4 +34,4 @@ app.get("/", (req, res) => {
 //paypal.connect(process.env.CLIENT_ID,process.env.SECRET_PAYPAL_KEY);
 connectDb();
 
-app.listen(PORT, () => console.log(`Listen on port ${PORT}`));
+server.listen(PORT, () => console.log(`Listen on port ${PORT}`));
