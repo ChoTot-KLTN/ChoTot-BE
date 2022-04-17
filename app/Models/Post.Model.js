@@ -42,6 +42,8 @@ const post = {
   totalPrice: DEFAULT_MODEL.number,
   dateStartPost: DEFAULT_MODEL.date,
   dateEndPost: DEFAULT_MODEL.date,
+  prePrice: DEFAULT_MODEL.number,
+  province: DEFAULT_MODEL.string,
 };
 
 module.exports = Post = mongoose.model("Post", createSchema(post));

@@ -32,9 +32,21 @@ const createPostMotelRoom = async (idUser,body) => {
           idUserPost:idUser,
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostMotelRoom.price,
+          province: newPostMotelRoom.address.province,
         });
         // await newPostMotelRoom.save();
         // await newPost.save();
+        if(!newPost){
+          return {
+            success: false,
+            message: {
+              ENG: "Create Motel Room post fail",
+              VN: "Tạo bài đăng phòng trọ thất bại",
+            },
+            status: HTTP_STATUS_CODE.FORBIDDEN,
+          };
+        }
         return {
           data: "data",
           success: true,

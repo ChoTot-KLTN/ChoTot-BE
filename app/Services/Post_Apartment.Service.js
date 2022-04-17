@@ -49,6 +49,8 @@ const createPostApartment = async (idUser,body) => {
           onModel: 'PostApartment',
           dateStartPost: now,
           dateEndPost: dateEnd,
+          prePrice: newPostApartment.price,
+          province: newPostApartment.address.province,
         });
 
         if(!newPost){
