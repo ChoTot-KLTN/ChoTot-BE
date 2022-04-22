@@ -15,6 +15,17 @@ const createPostOffice = async (idUser,body) => {
       const {typePost, type, address, nameOfBuilding, codeBuilding, block, floor,  typeOffice, doorDirection, interiorCondition,
         juridical, area,  price, title, content , image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostOffice = await PostOffice.create({
           typePost: typePost,
           type: type,
@@ -43,6 +54,7 @@ const createPostOffice = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostOffice.price,
           province: newPostOffice.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
 
         // await newPostOffice.save();

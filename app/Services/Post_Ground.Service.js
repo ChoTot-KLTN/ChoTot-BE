@@ -15,6 +15,17 @@ const createPostGround = async (idUser,body) => {
       const {typePost, type, address, typeGround, groundDirection,
         juridical, area, height, width,  price, title, content , image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostGround = await PostGround.create({
           typePost:typePost,
           type:type,
@@ -40,6 +51,7 @@ const createPostGround = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostGround.price,
           province: newPostGround.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         if(!newPost){
           return {

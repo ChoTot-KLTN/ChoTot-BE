@@ -1,7 +1,7 @@
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { findOneAndUpdate } = require("../Models/Account.Model");
-const { Post, PostApartment } = require("../Models/Index.Model");
+const { Post, PostApartment , User} = require("../Models/Index.Model");
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const { result } = require("@hapi/joi/lib/base");
@@ -19,7 +19,17 @@ const createPostApartment = async (idUser,body) => {
 
       let now = new Date();
       let dateEnd = addDays(new Date(), 7);
-          
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostApartment = await PostApartment.create({
           typePost:typePost,
           type:type,
@@ -51,6 +61,7 @@ const createPostApartment = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostApartment.price,
           province: newPostApartment.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
 
         if(!newPost){

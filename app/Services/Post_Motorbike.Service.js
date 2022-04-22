@@ -14,6 +14,17 @@ const createPostMotorbike = async (idUser,body) => {
       const {typePost, type, address, brand, yearOfRegistration,
         typeMotorbike, capacity,  statusMotorbike, numberOfKm, price, title, content , image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostMotorbike= await PostMotorbike.create({
           typePost:typePost,
           type:type,
@@ -39,6 +50,7 @@ const createPostMotorbike = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostMotorbike.price,
           province: newPostMotorbike.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         // await newPostMotorbike.save();
         // await newPost.save();

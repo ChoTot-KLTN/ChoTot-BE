@@ -12,6 +12,17 @@ const createPostMotelRoom = async (idUser,body) => {
       let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, interiorCondition, area, price, deposit, title, content , image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostMotelRoom = await PostMotelRoom.create({
           typePost:typePost,
           type:type,
@@ -34,6 +45,7 @@ const createPostMotelRoom = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostMotelRoom.price,
           province: newPostMotelRoom.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         // await newPostMotelRoom.save();
         // await newPost.save();
