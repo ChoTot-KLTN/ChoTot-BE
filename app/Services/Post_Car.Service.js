@@ -12,7 +12,17 @@ const createPostCar = async (idUser,body) => {
       let dateEnd = addDays(new Date(), 7);
       const {typePost, type, address, brand, yearOfManufacture,
         carGearbox, fuel, numberOfSeat, color,  statusCar, numberOfKm, price, title, content , image}=body; 
-        console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostCar= await PostCar.create({
           typePost:typePost,
           type:type,
@@ -40,6 +50,7 @@ const createPostCar = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostCar.price,
           province: newPostCar.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         // await newPostCar.save();
         // await newPost.save();

@@ -11,7 +11,17 @@ const createPostPhone = async (idUser,body) => {
       let now = new Date();
       let dateEnd = addDays(new Date(), 7);
       const {typePost, address, brand, color, ram, statusPhone, price, title, content , image}=body; 
-        
+      const nameOfPoster = await User.findOne({_id:idUser});
+      if(!nameOfPoster){
+        return {
+          success: false,
+          message: {
+            ENG: "User not found",
+            VN: "Không tìm thấy User",
+          },
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+        };
+      }
         const newPostPhone = await PostPhone.create({
           typePost:typePost,
           address: address,
@@ -35,6 +45,7 @@ const createPostPhone = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostPhone.price,
           province: newPostPhone.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         if(!newPost){
           return {

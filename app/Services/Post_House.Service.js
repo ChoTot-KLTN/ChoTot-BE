@@ -14,6 +14,17 @@ const createPostHouse = async (idUser,body) => {
       ,numberOfBathroom,  doorDirection, juridical, InteriorCondition, area, height,width,  price, title, content , 
       image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostHouse = await PostHouse.create({
           typePost:typePost,
           type:type,
@@ -45,6 +56,7 @@ const createPostHouse = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostHouse.price,
           province: newPostHouse.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         // await newPostHouse.save();
         // await newPost.save();

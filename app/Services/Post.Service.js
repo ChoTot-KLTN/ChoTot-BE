@@ -254,10 +254,11 @@ const updatePost = async (postId, body) => {
 
 const getListPost = async(idPoster, query)=>{
   try{
-    let {page, limit, status} = query;
+    let {page, limit,status} = query;
     page = parseInt(query.page,10) || 0; 
     limit = parseInt(query.limit,10) || 10;
-    if(status != undefined && status !=null) status = parseInt(query.status,10)||0
+    //if(status != undefined && status !=null) status = parseInt(query.status,10)||0
+    console.log("ID: "+idPoster)
     const getListPost = await Post.find({idUserPost:idPoster,status:status})
     .populate("on")
     .skip(page * limit)
@@ -291,8 +292,8 @@ const getAllPost = async(query)=>{
       let {page, limit, status} = query;
       page = parseInt(query.page,10) || 0; 
       limit = parseInt(query.limit,10) || 10;
-      if(status != undefined && status !=null) status = parseInt(query.status,10)||2
-      const allPost = await Post.find()
+     // if(status != undefined && status !=null) status = parseInt(query.status,10)||2
+      const allPost = await Post.find({status:status})
       .populate("on")
       .skip(page * limit)
       .limit(limit); 

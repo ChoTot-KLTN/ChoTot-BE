@@ -1,7 +1,7 @@
 
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
-const { Post, PostBicycle  } = require("../Models/Index.Model");
+const { Post, PostBicycle, User  } = require("../Models/Index.Model");
 
 function addDays(dateObj, numDays) {
   dateObj.setDate(dateObj.getDate() + numDays);
@@ -11,6 +11,17 @@ const createPostBicycle = async (idUser,body) => {
     try {
       let now = new Date();
       let dateEnd = addDays(new Date(), 7);
+      const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
       const {typePost, type, address, brand, 
         typeBicycle, engine,  statusBicycle, guarantee, price, title, content , image}=body; 
         console.log(idUser);
@@ -38,6 +49,7 @@ const createPostBicycle = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostBicycle.price,
           province: newPostBicycle.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         if(!newPost){
           return {

@@ -14,6 +14,17 @@ const createPostLaptop = async (idUser,body) => {
       const {typePost, address, brand, color, microprocessor, ram, hardDrive, typeHardDrive, graphicsCard, 
         statusLaptop, guarantee, price, title, content , image}=body; 
         console.log(idUser);
+        const nameOfPoster = await User.findOne({_id:idUser});
+        if(!nameOfPoster){
+          return {
+            success: false,
+            message: {
+              ENG: "User not found",
+              VN: "Không tìm thấy User",
+            },
+            status: HTTP_STATUS_CODE.NOT_FOUND,
+          };
+        }
         const newPostPhone = await PostLaptop.create({
           typePost:typePost,
           address: address,
@@ -41,6 +52,7 @@ const createPostLaptop = async (idUser,body) => {
           dateEndPost: dateEnd,
           prePrice: newPostPhone.price,
           province: newPostPhone.address.province,
+          nameOfPoster: nameOfPoster.name,
         });
         // await newPostPhone.save();
         // await newPost.save();
