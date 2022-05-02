@@ -28,6 +28,8 @@ exports.POST_PATH = {
   GET_LIST_POST: "get-list-post",
   GET_ALL_POST: "get-all-post",
   GET_DETAIL_POST: "get-detail-post",
+  RENEW_POST: "renew-post",
+  PRIORITY_POST: "priority-post",
 };
 
 exports.CONVERSATION_PATH = {
@@ -38,6 +40,12 @@ exports.MESSAGE_PATH = {
   CREATE_MESSAGE: "create-message",
   GET_MESSAGE: "get-message",
 };
+
+exports.ADMIN_PATH = {
+  GETALLUSER : "get-all-user",
+  BLOCKUSER: "block-user",
+  CHANGE_STATUS_POST: "change-status-post",
+}
 
 exports.PREFIX_PATH = {
   ADMIN: "admin",

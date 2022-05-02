@@ -6,9 +6,11 @@ const Schema = mongoose.Schema;
 
 // status của post:
 // - 0 Đợi duyệt
-// - 1 Chờ thanh toán
-// - 2 Đang hiển thị
-// - 3 Bị từ chối
+// - 1 Từ chối
+// - 2 Thanh toán
+// - 3 Đang hiển thị
+// - 4 Hủy
+// - 5 Hết hạn
 const post = {
   title: DEFAULT_MODEL.stringRequire,
   content: DEFAULT_MODEL.stringRequire,
@@ -34,7 +36,7 @@ const post = {
   userInteractive: DEFAULT_MODEL.array,
   totalLike: { ...DEFAULT_MODEL.number, default: 0 },
   comments: DEFAULT_MODEL.array,
-  isAdvertised: DEFAULT_MODEL.boolean,
+  isAdvertised: DEFAULT_MODEL.booleanFalse,
   priceAdvert: DEFAULT_MODEL.number,
   dateStartAdvert: DEFAULT_MODEL.date,
   timeEndAdvert: DEFAULT_MODEL.date,
