@@ -24,6 +24,8 @@ router.route(`/${POST_PATH.CREATE_POST_LAPTOP}`).post([verifyToken],controller.h
 router.route(`/${POST_PATH.GET_LIST_POST}`).get([verifyToken],controller.handleGetListPostByUser);
 router.route(`/${POST_PATH.GET_ALL_POST}`).get(controller.handleGetListPost); 
 router.route(`/${POST_PATH.GET_DETAIL_POST}`).get(controller.handleGetDetailPost);
-
+router.route(`/${POST_PATH.GET_LIST_POST_OVER}`).get([verifyToken],controller.handleGetListPostOverdueByUser);
+router.route(`/${POST_PATH.RENEW_POST}`).put([verifyToken],controller.handleRenewPost);
+router.route(`/${POST_PATH.PRIORITY_POST}`).post([verifyToken],controller.handlePriorityPost);
 
 module.exports = router;

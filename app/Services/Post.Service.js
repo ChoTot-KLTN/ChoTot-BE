@@ -16,7 +16,7 @@ const {updatePostMotorbike,deletePostMotobike,getDetailPostMotorbike} = require(
 const {updatePostBicycle,deletePostBicycle,getDetailPostBicycle} = require("./Post_Bicycle.Service");
 const {updatePostPhone,deletePostPhone,getDetailPostPhone} = require("./Post_Phone.Service");
 const {updatePostLaptop,deletePostLaptop,getDetailPostLaptop}= require("./Post_Laptop.Service");
-const { is } = require("express/lib/request");
+const {payment} = require("./VNPay.Service");
 
 const createPost = async (idUser,body) => {
   try {
@@ -289,11 +289,12 @@ const getListPost = async(idPoster, query)=>{
 const getAllPost = async(query)=>{
     // load các bài post đã được duyệt lên trang chủ không cần authen
     try{
+      let now = new Date();
       let {page, limit, status} = query;
       page = parseInt(query.page,10) || 0; 
       limit = parseInt(query.limit,10) || 10;
      // if(status != undefined && status !=null) status = parseInt(query.status,10)||2
-      const allPost = await Post.find({status:status})
+      const allPost = await Post.find({status:status,dateEndPost:{$gte:now}})
       .populate("on")
       .skip(page * limit)
       .limit(limit); 
@@ -344,8 +345,7 @@ const getDetailPost = async (postId) => {
       };
     }
 
-    'PostApartment', 'PostHouse', 'PostGround', 'PostOffice', 'PostMotelRoom', 
-    'PostCar', 'PostMotorbike', 'PostBicycle', 'PostLaptop', 'PostPhone'
+    
     let result  =async () =>null;
     if(post.onModel === 'PostApartment'){
         result = await getDetailPostApartment(post.on);
@@ -397,6 +397,144 @@ const getDetailPost = async (postId) => {
       };
     }
 };
+
+const overduePost = async (idPoster, query) => {
+  // Các bài post của người dùng quá hạn
+  try{
+    let now = new Date();
+    let {page, limit,status} = query;
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+    //if(status != undefined && status !=null) status = parseInt(query.status,10)||0
+    console.log("ID: "+idPoster)
+    const getListPost = await Post.find({idUserPost:idPoster,status:status,dateEndPost:{$lte:now}})
+    .populate("on")
+    .skip(page * limit)
+    .limit(limit);  
+    const total = getListPost.length;
+    return{
+      data: {
+        total:total,
+         posts: getListPost
+        },
+      success: true,
+      message: {
+        ENG: "Get list post by user successfully",
+        VN: "Lấy danh sách theo user thành công",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+
+function addDays(dateObj, numDays) {
+  dateObj.setDate(dateObj.getDate() + numDays);
+  return dateObj;
+}
+const renewPost = async(idPoster,body)=>{
+  // tạo mới thường
+  try{
+    const {idPost,days} = body;
+    let now = new Date();
+    let dateEnd = addDays(new Date(), days);
+    
+    const post = await Post.findOne({_id:idPost,idUserPost:idPoster});
+    if(!post){
+      return {
+        data:"data",
+        success:false,
+        message: {
+          ENG: "post not found",
+          VN: "Không tìm thấy bài viết",
+        },
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      }
+    }
+    if(post.isAdvertised===true){
+      post.isAdvertised = false;
+      post.dateEndPost = dateEnd;
+    }else{
+      post.dateEndPost = dateEnd;
+    }
+    await post.save();
+    return {
+      data:"data",
+      success:true,
+      message: {
+        ENG: "renew post successfully",
+        VN: "Gia hạn bài đăng thành công",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const priorityPost = async (req,idPoster,body)=>{
+  try{
+    const {idPost,prices,nameOfPoster} = body;
+    
+    console.log("idPost: " ,idPost);
+    console.log("priceAdvert: ", prices);
+    console.log("Name: ", nameOfPoster,idPoster );
+    const transactionsInfo = {
+      idPoster: idPoster,
+      typeOrders: "payment",
+      amount: `${~~prices}`,
+      bankCode: "NCB",
+      orderDescription: "Nang cap tin dang uu tien",
+      language: "vn",
+      typeCart: 'CLIENT',
+      fullName: nameOfPoster,
+      postID: idPost,
+     
+    };
+    
+    const resultPayment = await payment(
+      req,
+      transactionsInfo,
+    );
+    if (resultPayment.success) {
+      return{
+        success:true,
+        message:{
+          END:"Priority upgrade successful",
+          VN:"Thanh toán thành công",
+        },
+        data:resultPayment.data.url,
+        status: HTTP_STATUS_CODE.OK,
+      }; 
+    } else {
+      return{
+        success:false,
+        message:{
+          END:"Priority upgrade fail",
+          VN:"Thanh toán thất bại",
+        },
+        data:resultPayment.data.url,
+        status:HTTP_STATUS_CODE.FORBIDDEN,
+      }; 
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
 module.exports = {
   createPost,
   deletePost,
@@ -405,4 +543,7 @@ module.exports = {
   getListPost, // get list này có authen theo user
   getAllPost, // get list này không cần authen
   getDetailPost,
+  overduePost,
+  renewPost,
+  priorityPost,
 };

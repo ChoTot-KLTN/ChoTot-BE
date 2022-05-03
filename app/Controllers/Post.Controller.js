@@ -8,6 +8,9 @@ const {
   getListPost,
   getAllPost,
   getDetailPost,
+  overduePost,
+  renewPost,
+  priorityPost,
 } = require("../Services/Post.Service");
 
 const {createPostApartment} = require('../Services/Post_Apartment.Service');
@@ -151,6 +154,29 @@ const handleGetDetailPost = async (req, res) => {
   return sendError(res, result.message, result.status);
 };
 
+const handleGetListPostOverdueByUser= async (req, res) => {
+  const token = req.body.token.id;
+  const result = await overduePost(token,req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleRenewPost= async (req, res) => {
+  const token = req.body.token.id;
+  const result = await renewPost(token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handlePriorityPost = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await priorityPost(req,token,req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -168,5 +194,8 @@ module.exports = {
   handleCreateLaptop,
   handleGetListPostByUser,
   handleGetListPost,
-  handleGetDetailPost
+  handleGetDetailPost,
+  handleGetListPostOverdueByUser,
+  handleRenewPost,
+  handlePriorityPost,
 };
