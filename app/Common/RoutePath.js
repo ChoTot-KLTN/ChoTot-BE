@@ -30,6 +30,7 @@ exports.POST_PATH = {
   GET_DETAIL_POST: "get-detail-post",
   RENEW_POST: "renew-post",
   PRIORITY_POST: "priority-post",
+  GET_LIST_POST_OVER:"get-list-post-over"
 };
 
 exports.CONVERSATION_PATH = {
