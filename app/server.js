@@ -1,5 +1,5 @@
 const connectDb = require("./Common/ConnectDb");
-//const cors = require("cors");
+const cors = require("cors");
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -27,6 +27,8 @@ const server = require("http").Server(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/Uploads", express.static("Uploads"));
+app.use(cors());
+app.options('*',cors());
 app.use("/", router);
 app.get("/", (req, res) => {
   res.send("cccccc");
