@@ -13,7 +13,7 @@ const PostBicycle = require("./Post_Bicycle.Model");
 const PostLaptop = require("./Post_Laptop.Model");
 const Message = require("./Message.Model");
 const Conversation = require("./Conversation.Model");
-
+const Comments = require("./Comments.Model");
 module.exports = {
   Account,
   User,
@@ -29,5 +29,6 @@ module.exports = {
   PostBicycle,
   PostLaptop,
   Message,
-  Conversation
+  Conversation,
+  Comments,
 };
