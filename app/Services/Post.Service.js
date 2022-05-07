@@ -254,12 +254,13 @@ const updatePost = async (postId, body) => {
 
 const getListPost = async(idPoster, query)=>{
   try{
+    let now = new Date();
     let {page, limit,status} = query;
     page = parseInt(query.page,10) || 0; 
     limit = parseInt(query.limit,10) || 10;
     //if(status != undefined && status !=null) status = parseInt(query.status,10)||0
     console.log("ID: "+idPoster)
-    const getListPost = await Post.find({idUserPost:idPoster,status:status})
+    const getListPost = await Post.find({idUserPost:idPoster,status:status,dateEndPost:{$gte:now}})
     .populate("on")
     .skip(page * limit)
     .limit(limit);  
