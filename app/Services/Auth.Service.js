@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const { generateString } = require("../Common/Helper");
 const { sendOtp,sendPassword } = require("./Mail.Service");
+const {sendSMS} = require("../Common/Twilio_SMS");
 
 const register = async (body) => {
   try {
@@ -32,7 +33,12 @@ const register = async (body) => {
     // Mã hóa password
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = generateString(4, false);
-    await sendOtp(email, otp);
+    // await sendOtp(email, otp);
+    data = {
+      message: `Mã otp của bạn là ${otp}`,
+      phoneNumber:phone
+    };
+  await sendSMS(data);
     const newUser = new User({
       name,
       email,
