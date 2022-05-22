@@ -299,7 +299,8 @@ const getAllPost = async(query)=>{
       .populate("on")
       .skip(page * limit)
       .limit(limit); 
-      const total = allPost.length;
+      const getTotal = await Post.find({status:status,dateEndPost:{$gte:now}});
+      const total = getTotal.length;
       if(allPost){
         return{
           data: {
