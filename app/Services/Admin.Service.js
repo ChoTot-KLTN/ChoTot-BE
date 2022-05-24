@@ -37,13 +37,14 @@ const getAllUser = async (query) => { // không cần populate qua bảng User
         options
       )
       .skip(page * limit)
-      .limit(limit); ;
+      .limit(limit); 
+      const totalAccount = await Account.find();
       return {
         message: {
           ENG: "Get list User successfully",
           VN: "Lấy tất cả người dùng thành công",
         },
-        data: accounts || [],
+        data:{ total: totalAccount.length, users: accounts || []},
         success: true,
         status: HTTP_STATUS_CODE.OK,
       };
