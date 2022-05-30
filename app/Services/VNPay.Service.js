@@ -2,6 +2,8 @@
 
 const uuid = require("uuid").v1;
 const {vnp_TmnCode,vnp_HashSecret,vnp_Url,vnp_ReturnUrl} = require("../Common/Config");
+const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
+const { Post,Revenue} = require("../Models/Index.Model");
 const payment = async (req,body) =>{
     try {
         let ipAddr = req.headers['x-forwarded-for'] ||
@@ -150,11 +152,59 @@ const sortObject = (o) => {
     }
     return sorted;
   };
-
+const saveRevenueVNPay = async(idUser,body)=>{
+  const {idPost,price}=body;
+  try {
+    let now = new Date();
+    const post = await Post.findOne({ _id: idPost ,idUserPost:idUser});
+    if (!post) {
+      return {
+        success: false,
+        message: {
+          ENG: "Post not found",
+          VN: "Không tìm thấy bài viết",
+        },
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    post.isAdvertised = true;
+    post.priceAdvert = price;
+    await post.save();
+    const newRevenue = new Revenue({
+      idPost:post._id,
+      priceAdvert:price,
+      dateStartAdvert:now,
+      monthStart:now.getMonth() + 1,
+      yearStart:now.getFullYear()
+    });
+    await newRevenue.save();
+    return {
+      data: "data",
+      success: true,
+      message: {
+        ENG: "Payment successfully",
+        VN: "Thanh toán thành công",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      data: "data",
+      success: false,
+      message: {
+        ENG: "Payment fail",
+        VN: "Thanh toán thất bại",
+      },
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+    };
+  }
+};
   module.exports={
     payment,
     VNPayReturn,
     sortObject,
+    saveRevenueVNPay,
 }
 
 // const vnpayServices = new VNPayServices();

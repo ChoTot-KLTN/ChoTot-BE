@@ -27,5 +27,6 @@ router.route(`/${POST_PATH.GET_DETAIL_POST}`).get(controller.handleGetDetailPost
 router.route(`/${POST_PATH.GET_LIST_POST_OVER}`).get([verifyToken],controller.handleGetListPostOverdueByUser);
 router.route(`/${POST_PATH.RENEW_POST}`).put([verifyToken],controller.handleRenewPost);
 router.route(`/${POST_PATH.PRIORITY_POST}`).post([verifyToken],controller.handlePriorityPost);
+router.route(`/${POST_PATH.GET_ALL_POST_Type}`).get(controller.handleGetListPostWithType); 
 
 module.exports = router;

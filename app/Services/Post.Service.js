@@ -291,15 +291,19 @@ const getAllPost = async(query)=>{
     // load các bài post đã được duyệt lên trang chủ không cần authen
     try{
       let now = new Date();
-      let {page, limit, status} = query;
+      let {page, limit, status,isAdvert} = query;
       page = parseInt(query.page,10) || 0; 
       limit = parseInt(query.limit,10) || 10;
-     // if(status != undefined && status !=null) status = parseInt(query.status,10)||2
-      const allPost = await Post.find({status:status,dateEndPost:{$gte:now}})
+      if(isAdvert != undefined && isAdvert !=null){
+        isAdvert = true;
+       }else{
+        isAdvert = false;
+       }
+      const allPost = await Post.find({status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert})
       .populate("on")
       .skip(page * limit)
       .limit(limit); 
-      const getTotal = await Post.find({status:status,dateEndPost:{$gte:now}});
+      const getTotal = await Post.find({status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert});
       const total = getTotal.length;
       if(allPost){
         return{
@@ -537,6 +541,56 @@ const priorityPost = async (req,idPoster,body)=>{
     };
   }
 }
+
+const getAllPostWithType = async(query)=>{
+  // load các bài post đã được duyệt lên trang chủ không cần authen
+  try{
+    let now = new Date();
+    let {page, limit, status,type,isAdvert} = query;
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+   if(isAdvert != undefined && isAdvert !=null){
+    isAdvert = true;
+   }else{
+    isAdvert = false;
+   }
+    const allPost = await Post.find({status:status,onModel:type,dateEndPost:{$gte:now},isAdvertised:isAdvert})
+    .populate("on")
+    .skip(page * limit)
+    .limit(limit); 
+    const getTotal = await Post.find({status:status,onModel:type,dateEndPost:{$gte:now},isAdvertised:isAdvert});
+    const total = getTotal.length;
+    if(allPost){
+      return{
+        data: {
+          total:total,
+           posts: allPost
+          },
+        success: true,
+        message: {
+          ENG: "Get list post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
 module.exports = {
   createPost,
   deletePost,
@@ -548,4 +602,5 @@ module.exports = {
   overduePost,
   renewPost,
   priorityPost,
+  getAllPostWithType,
 };
