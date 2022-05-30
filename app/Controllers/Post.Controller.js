@@ -11,6 +11,7 @@ const {
   overduePost,
   renewPost,
   priorityPost,
+  getAllPostWithType,
 } = require("../Services/Post.Service");
 
 const {createPostApartment} = require('../Services/Post_Apartment.Service');
@@ -177,6 +178,12 @@ const handlePriorityPost = async (req, res) => {
   return sendError(res, result.message, result.status);
 };
 
+const handleGetListPostWithType= async (req, res) => {
+  const result = await getAllPostWithType(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -198,4 +205,5 @@ module.exports = {
   handleGetListPostOverdueByUser,
   handleRenewPost,
   handlePriorityPost,
+  handleGetListPostWithType,
 };

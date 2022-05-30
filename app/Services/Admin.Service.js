@@ -1,6 +1,6 @@
 const { Post, PostApartment, PostHouse,PostGround, PostOffice, 
     PostMotelRoom, PostPhone, PostCar, PostMotorbike, PostBicycle,
-    PostLaptop,Account} = require("../Models/Index.Model");
+    PostLaptop,Account,Revenue} = require("../Models/Index.Model");
 const { mapToRegexContains } = require("../Common/Helper");
   
 const bcrypt = require("bcrypt");

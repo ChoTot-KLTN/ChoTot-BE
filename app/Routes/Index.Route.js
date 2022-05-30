@@ -8,5 +8,6 @@ router.use(`/${PREFIX_PATH.CONVERSATION}`, require("./Conversation.Route"));
 router.use(`/${PREFIX_PATH.MESSAGE}`, require("./Message.Route"));
 router.use(`/${PREFIX_PATH.ADMIN}`,require("./Admin.Route"));
 router.use("/payment", require("./Paypal.Route"));
+router.use("/vnpay", require("./VNPay.Route"));
 
 module.exports = router;
