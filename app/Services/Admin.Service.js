@@ -59,7 +59,7 @@ const getAllUser = async (query) => { // không cần populate qua bảng User
 
   const lockUser = async(body)=>{
     try{
-      const update = {status:"lock"};
+      const update = {status:body.status};
       const blockUser = await Account.findOneAndUpdate({username:body.email},update,{new:true});
       if(!blockUser){
         return {
