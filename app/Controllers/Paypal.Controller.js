@@ -23,11 +23,11 @@ const OrderPaypal = async (req, res, next) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url:`http://localhost:8080/payment/success?${reqQuery}`,
+      return_url:`https://marketplace111.herokuapp.com/payment/success?${reqQuery}`,
         // req.body.from === "web"
         //   ? `https://hqd-mobile-store-api.herokuapp.com/payment/success-web?${reqQuery}` 
-        //   : `https://hqd-mobile-store-api.herokuapp.com/payment/success?${reqQuery}`, //http://localhost:8080 https://marketplace111.herokuapp.com
-      cancel_url:"http://localhost:8080/payment/cancel"
+        //   : `https://hqd-mobile-store-api.herokuapp.com/payment/success?${reqQuery}`, //http://localhost:8080 
+      cancel_url:"https://marketplace111.herokuapp.com/payment/cancel"
         // req.body.from === "web"
         //   ? "https://hqd-mobile-store-api.herokuapp.com/payment/cancel-web"
         //   : "https://hqd-mobile-store-api.herokuapp.com/payment/cancel",
