@@ -43,11 +43,18 @@ exports.MESSAGE_PATH = {
   GET_MESSAGE: "get-message",
 };
 
+exports.COMMENTS_PATH = {
+  CREATE_COMMENTS: "create-comments",
+  GET_COMMENTS: "get-comments",
+  UPDATE_COMMENTS: "update-comments",
+  DELETE_COMMENTS: "delete-comments",
+};
+
 exports.ADMIN_PATH = {
-  GETALLUSER : "get-all-user",
+  GETALLUSER: "get-all-user",
   BLOCKUSER: "block-user",
   CHANGE_STATUS_POST: "change-status-post",
-}
+};
 
 exports.PREFIX_PATH = {
   ADMIN: "admin",
@@ -56,4 +63,5 @@ exports.PREFIX_PATH = {
   POST: "post",
   CONVERSATION: "conversation",
   MESSAGE: "message",
+  COMMENTS: "comments",
 };
