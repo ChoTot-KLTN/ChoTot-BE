@@ -15,6 +15,7 @@ const Message = require("./Message.Model");
 const Conversation = require("./Conversation.Model");
 const Revenue = require("./Revenue.Model");
 
+const Comments = require("./Comments.Model");
 module.exports = {
   Account,
   User,
@@ -32,4 +33,5 @@ module.exports = {
   Message,
   Conversation,
   Revenue,
+  Comments,
 };

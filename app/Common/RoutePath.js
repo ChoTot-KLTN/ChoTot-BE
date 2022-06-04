@@ -31,7 +31,10 @@ exports.POST_PATH = {
   RENEW_POST: "renew-post",
   PRIORITY_POST: "priority-post",
   GET_ALL_POST_Type: "get-all-post-type",
-  GET_LIST_POST_OVER:"get-list-post-over"
+  GET_LIST_POST_OVER:"get-list-post-over",
+  GET_LIST_POST_CATEGORYTECH:"get-list-post-categorytech",
+  GET_LIST_POST_CATEGORYCAR:"get-list-post-categorycar",
+  GET_LIST_POST_CATEGORYBDS:"get-list-post-categorybds",
 };
 
 exports.CONVERSATION_PATH = {
@@ -43,11 +46,18 @@ exports.MESSAGE_PATH = {
   GET_MESSAGE: "get-message",
 };
 
+exports.COMMENTS_PATH = {
+  CREATE_COMMENTS: "create-comments",
+  GET_COMMENTS: "get-comments",
+  UPDATE_COMMENTS: "update-comments",
+  DELETE_COMMENTS: "delete-comments",
+};
+
 exports.ADMIN_PATH = {
-  GETALLUSER : "get-all-user",
+  GETALLUSER: "get-all-user",
   BLOCKUSER: "block-user",
   CHANGE_STATUS_POST: "change-status-post",
-}
+};
 
 exports.PREFIX_PATH = {
   ADMIN: "admin",
@@ -56,4 +66,5 @@ exports.PREFIX_PATH = {
   POST: "post",
   CONVERSATION: "conversation",
   MESSAGE: "message",
+  COMMENTS: "comments",
 };
