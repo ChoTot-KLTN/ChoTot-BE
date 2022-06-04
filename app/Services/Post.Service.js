@@ -597,32 +597,14 @@ const getAllPostWithCategoryTech = async(query)=>{
   try{
     let now = new Date();
     let {page, limit,isAdvert,isRecent,...remainQuery} = query;
-    
-    
     page = parseInt(query.page,10) || 0; 
     limit = parseInt(query.limit,10) || 10;
-  
    if(isAdvert != undefined && isAdvert !=null){
     isAdvert = true;
    }else{
     isAdvert = false;
    }
-   if(isRecent != undefined && isRecent !=null){
-    isRecent = 1;
-   }else{
-    isRecent = -1;
-   }
-   console.log("isRevent: " , isRecent);
-    // const allPost = await Post.find({$or: [
-    //   {'onModel':'PostLaptop'},
-    //   {'onModel':'PostPhone'},
-    // ],
-    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
-    //   })
-    //   .sort({createdAt:1})
-    //   .skip(page * limit)
-    //   .limit(limit); 
-    let dateCompare = addDays(new Date(), 2);
+   console.log("isRecent",isRecent);
     const allPost = await Post.aggregate([
       {
         $match:{
@@ -630,6 +612,7 @@ const getAllPostWithCategoryTech = async(query)=>{
           'status':2,
           'dateEndPost':{$gte:now},
           'isAdvertised':isAdvert,
+          // 'dateStartPost':{$lte:addDays(dateStartPost,2)}
         }
       },
       {
@@ -638,17 +621,21 @@ const getAllPostWithCategoryTech = async(query)=>{
       {
         $limit:limit
       },
-      {
-        $sort:{'createdAt':isRecent}
-      }
+     
     ]);
-      
-   
+    let result = [];
+   allPost.forEach((element, index)=>{
+     if(now <= addDays(element.dateStartPost,3)){
+       console.log(element.dateStartPost)
+       result.push(element);
+     }
+   });
+   let result1 = isRecent!= undefined ? allPost : result;
     if(allPost){
       return{
         data: {
           // total:total,
-           posts: allPost
+           posts: result1
           },
         success: true,
         message: {
@@ -675,13 +662,15 @@ const getAllPostWithCategoryTech = async(query)=>{
     };
   }
 }
+
+
+
 const getAllPostWithCategoryCar = async(query)=>{
   // load các bài post đã được duyệt lên trang chủ không cần authen
   try{
     let now = new Date();
     let {page, limit, isRecent,isAdvert,...remainQuery} = query;
-    
-    // console.log(page,limit,status,isAdvert)
+    console.log('isRecent',isRecent)
     page = parseInt(query.page,10) || 0; 
     limit = parseInt(query.limit,10) || 10;
    if(isAdvert != undefined && isAdvert !=null){
@@ -689,21 +678,7 @@ const getAllPostWithCategoryCar = async(query)=>{
    }else{
     isAdvert = false;
    }
-   if(isRecent != undefined && isRecent !=null){
-    isRecent = 1;
-   }else{
-    isRecent = -1;
-   }
-  
-    // const allPost = await Post.find({$or: [
-    //   {'onModel':'PostMotorbike'},
-    //   {'onModel':'PostBicycle'},
-    //   {'onModel':'PostCar'},
-    // ],
-    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
-    //   })
-    //   .skip(page * limit)
-    //   .limit(limit); 
+   
     const allPost = await Post.aggregate([
       {
         $match:{
@@ -719,15 +694,21 @@ const getAllPostWithCategoryCar = async(query)=>{
       {
         $limit:limit
       },
-      {
-        $sort:{'createdAt':isRecent}
-      }
     ]);
+    let result = [];
+    allPost.forEach((element, index)=>{
+      if(now <= addDays(element.dateStartPost,3)){
+        console.log(element.dateStartPost)
+        result.push(element);
+      }
+    });
+    console.log("length: ", result.length)
+    let result1 = isRecent!= undefined ? allPost : result;
     if(allPost){
       return{
         data: {
           // total:total,
-           posts: allPost
+           posts: result1
           },
         success: true,
         message: {
@@ -769,22 +750,7 @@ const getAllPostWithCategoryBDS = async(query)=>{
    }else{
     isAdvert = false;
    }
-   if(isRecent != undefined && isRecent !=null){
-    isRecent = 1;
-   }else{
-    isRecent = -1;
-   }
-    // const allPost = await Post.find({$or: [
-    //   {'onModel':'PostApartment'},
-    //   {'onModel':'PostHouse'},
-    //   {'onModel':'PostGround'},
-    //   {'onModel':'PostOffice'},
-    //   {'onModel':'PostMotelRoom'},
-    // ],
-    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
-    //   })
-    //   .skip(page * limit)
-    //   .limit(limit); 
+ 
     const allPost = await Post.aggregate([
       {
         $match:{
@@ -801,15 +767,20 @@ const getAllPostWithCategoryBDS = async(query)=>{
       {
         $limit:limit
       },
-      {
-        $sort:{'createdAt':isRecent}
-      }
     ]);
+    let result = [];
+    allPost.forEach((element, index)=>{
+      if(now <= addDays(element.dateStartPost,3)){
+        console.log(element.dateStartPost)
+        result.push(element);
+      }
+    });
+    let result1 = isRecent!= undefined ? allPost : result;
     if(allPost){
       return{
         data: {
           // total:total,
-           posts: allPost
+           posts: result1
           },
         success: true,
         message: {
