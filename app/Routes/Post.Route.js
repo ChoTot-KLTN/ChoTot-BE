@@ -28,5 +28,8 @@ router.route(`/${POST_PATH.GET_LIST_POST_OVER}`).get([verifyToken],controller.ha
 router.route(`/${POST_PATH.RENEW_POST}`).put([verifyToken],controller.handleRenewPost);
 router.route(`/${POST_PATH.PRIORITY_POST}`).post([verifyToken],controller.handlePriorityPost);
 router.route(`/${POST_PATH.GET_ALL_POST_Type}`).get(controller.handleGetListPostWithType); 
+router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYTECH}`).get(controller.handleGetListPostWithCategory); 
+router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYCAR}`).get(controller.handleGetListPostWithCategoryCar); 
+router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYBDS}`).get(controller.handleGetListPostWithCategoryBDS); 
 
 module.exports = router;

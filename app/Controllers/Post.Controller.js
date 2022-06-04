@@ -12,6 +12,9 @@ const {
   renewPost,
   priorityPost,
   getAllPostWithType,
+  getAllPostWithCategoryTech,
+  getAllPostWithCategoryCar,
+  getAllPostWithCategoryBDS
 } = require("../Services/Post.Service");
 
 const { createPostApartment } = require("../Services/Post_Apartment.Service");
@@ -183,6 +186,24 @@ const handleGetListPostWithType= async (req, res) => {
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+const handleGetListPostWithCategory= async (req, res) => {
+  const result = await getAllPostWithCategoryTech(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleGetListPostWithCategoryCar= async (req, res) => {
+  const result = await getAllPostWithCategoryCar(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleGetListPostWithCategoryBDS= async (req, res) => {
+  const result = await getAllPostWithCategoryBDS(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -205,4 +226,7 @@ module.exports = {
   handleRenewPost,
   handlePriorityPost,
   handleGetListPostWithType,
+  handleGetListPostWithCategory,
+  handleGetListPostWithCategoryCar,
+  handleGetListPostWithCategoryBDS
 };

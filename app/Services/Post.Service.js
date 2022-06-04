@@ -591,6 +591,251 @@ const getAllPostWithType = async(query)=>{
     };
   }
 }
+
+const getAllPostWithCategoryTech = async(query)=>{
+  // load các bài post đã được duyệt lên trang chủ không cần authen
+  try{
+    let now = new Date();
+    let {page, limit,isAdvert,isRecent,...remainQuery} = query;
+    
+    
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+  
+   if(isAdvert != undefined && isAdvert !=null){
+    isAdvert = true;
+   }else{
+    isAdvert = false;
+   }
+   if(isRecent != undefined && isRecent !=null){
+    isRecent = 1;
+   }else{
+    isRecent = -1;
+   }
+   console.log("isRevent: " , isRecent);
+    // const allPost = await Post.find({$or: [
+    //   {'onModel':'PostLaptop'},
+    //   {'onModel':'PostPhone'},
+    // ],
+    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
+    //   })
+    //   .sort({createdAt:1})
+    //   .skip(page * limit)
+    //   .limit(limit); 
+    let dateCompare = addDays(new Date(), 2);
+    const allPost = await Post.aggregate([
+      {
+        $match:{
+          $or:[{'onModel':'PostLaptop'},{'onModel':'PostPhone'}],
+          'status':2,
+          'dateEndPost':{$gte:now},
+          'isAdvertised':isAdvert,
+        }
+      },
+      {
+        $skip:page*limit
+      },
+      {
+        $limit:limit
+      },
+      {
+        $sort:{'createdAt':isRecent}
+      }
+    ]);
+      
+   
+    if(allPost){
+      return{
+        data: {
+          // total:total,
+           posts: allPost
+          },
+        success: true,
+        message: {
+          ENG: "Get list post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
+const getAllPostWithCategoryCar = async(query)=>{
+  // load các bài post đã được duyệt lên trang chủ không cần authen
+  try{
+    let now = new Date();
+    let {page, limit, isRecent,isAdvert,...remainQuery} = query;
+    
+    // console.log(page,limit,status,isAdvert)
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+   if(isAdvert != undefined && isAdvert !=null){
+    isAdvert = true;
+   }else{
+    isAdvert = false;
+   }
+   if(isRecent != undefined && isRecent !=null){
+    isRecent = 1;
+   }else{
+    isRecent = -1;
+   }
+  
+    // const allPost = await Post.find({$or: [
+    //   {'onModel':'PostMotorbike'},
+    //   {'onModel':'PostBicycle'},
+    //   {'onModel':'PostCar'},
+    // ],
+    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
+    //   })
+    //   .skip(page * limit)
+    //   .limit(limit); 
+    const allPost = await Post.aggregate([
+      {
+        $match:{
+          $or:[{'onModel':'PostMotorbike'},{'onModel':'PostBicycle'},{'onModel':'PostCar'}],
+          'status':2,
+          'dateEndPost':{$gte:now},
+          'isAdvertised':isAdvert,
+        }
+      },
+      {
+        $skip:page*limit
+      },
+      {
+        $limit:limit
+      },
+      {
+        $sort:{'createdAt':isRecent}
+      }
+    ]);
+    if(allPost){
+      return{
+        data: {
+          // total:total,
+           posts: allPost
+          },
+        success: true,
+        message: {
+          ENG: "Get list post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
+
+const getAllPostWithCategoryBDS = async(query)=>{
+  // load các bài post đã được duyệt lên trang chủ không cần authen
+  try{
+    let now = new Date();
+    let {page, limit, isRecent,isAdvert,...remainQuery} = query;
+    
+    // console.log(page,limit,status,isAdvert)
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+   if(isAdvert != undefined && isAdvert !=null){
+    isAdvert = true;
+   }else{
+    isAdvert = false;
+   }
+   if(isRecent != undefined && isRecent !=null){
+    isRecent = 1;
+   }else{
+    isRecent = -1;
+   }
+    // const allPost = await Post.find({$or: [
+    //   {'onModel':'PostApartment'},
+    //   {'onModel':'PostHouse'},
+    //   {'onModel':'PostGround'},
+    //   {'onModel':'PostOffice'},
+    //   {'onModel':'PostMotelRoom'},
+    // ],
+    //   status:status,dateEndPost:{$gte:now},isAdvertised:isAdvert
+    //   })
+    //   .skip(page * limit)
+    //   .limit(limit); 
+    const allPost = await Post.aggregate([
+      {
+        $match:{
+          $or:[{'onModel':'PostApartment'},{'onModel':'PostHouse'},{'onModel':'PostGround'},
+          {'onModel':'PostOffice'},{'onModel':'PostMotelRoom'}],
+          'status':2,
+          'dateEndPost':{$gte:now},
+          'isAdvertised':isAdvert,
+        }
+      },
+      {
+        $skip:page*limit
+      },
+      {
+        $limit:limit
+      },
+      {
+        $sort:{'createdAt':isRecent}
+      }
+    ]);
+    if(allPost){
+      return{
+        data: {
+          // total:total,
+           posts: allPost
+          },
+        success: true,
+        message: {
+          ENG: "Get list post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
 module.exports = {
   createPost,
   deletePost,
@@ -603,4 +848,7 @@ module.exports = {
   renewPost,
   priorityPost,
   getAllPostWithType,
+  getAllPostWithCategoryTech,
+  getAllPostWithCategoryCar,
+  getAllPostWithCategoryBDS
 };

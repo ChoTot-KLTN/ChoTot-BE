@@ -27,8 +27,14 @@ const server = require("http").Server(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/Uploads", express.static("Uploads"));
-app.use(cors());
-app.options("*", cors());
+app.use(cors({
+  origin: '*',
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  optionsSuccessStatus: 200 
+}));
+// app.options("*", cors());
 app.use("/", router);
 app.get("/", (req, res) => {
   res.send("cccccc");
