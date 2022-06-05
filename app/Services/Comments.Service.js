@@ -34,8 +34,9 @@ const getComments = async (query) => {
     const comments = await Comments.find({
       postId: query.postID,
       isDeleted: false,
-    }) 
-    .populate("idUserComment");
+    })
+    .populate("idUserComment")
+    
     // const comments = await Comments.aggregate([
     //   {
     //     $lookup: {

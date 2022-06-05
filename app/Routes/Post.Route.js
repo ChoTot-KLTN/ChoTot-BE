@@ -31,5 +31,9 @@ router.route(`/${POST_PATH.GET_ALL_POST_Type}`).get(controller.handleGetListPost
 router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYTECH}`).get(controller.handleGetListPostWithCategory); 
 router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYCAR}`).get(controller.handleGetListPostWithCategoryCar); 
 router.route(`/${POST_PATH.GET_LIST_POST_CATEGORYBDS}`).get(controller.handleGetListPostWithCategoryBDS); 
+router.route('/revenue-month').get(controller.handleRevenueWithMonth); 
+router.route('/favorite').post([verifyToken],controller.handleFavoritePost); 
+router.route('/get-list-favorite').get([verifyToken],controller.handleGetListFavoritePost); 
+router.route('/cancel-favorite').put([verifyToken],controller.handleCancelFavoritePost); 
 
 module.exports = router;

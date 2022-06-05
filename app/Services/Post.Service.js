@@ -1,4 +1,4 @@
-const { Post, PostApartment, PostHouse,PostGround, PostOffice, 
+const { Post, PostApartment,Revenue,Favorite, PostHouse,PostGround, PostOffice, 
   PostMotelRoom, PostPhone, PostCar, PostMotorbike, PostBicycle,
   PostLaptop,} = require("../Models/Index.Model");
   const { mapToRegexContains } = require("../Common/Helper");
@@ -540,7 +540,7 @@ const priorityPost = async (req,idPoster,body)=>{
       status: error.status,
     };
   }
-}
+};
 
 const getAllPostWithType = async(query)=>{
   // load các bài post đã được duyệt lên trang chủ không cần authen
@@ -590,7 +590,7 @@ const getAllPostWithType = async(query)=>{
       status: error.status,
     };
   }
-}
+};
 
 const getAllPostWithCategoryTech = async(query)=>{
   // load các bài post đã được duyệt lên trang chủ không cần authen
@@ -626,7 +626,6 @@ const getAllPostWithCategoryTech = async(query)=>{
     let result = [];
    allPost.forEach((element, index)=>{
      if(now <= addDays(element.dateStartPost,3)){
-       console.log(element.dateStartPost)
        result.push(element);
      }
    });
@@ -661,7 +660,7 @@ const getAllPostWithCategoryTech = async(query)=>{
       status: error.status,
     };
   }
-}
+};
 
 
 
@@ -698,7 +697,6 @@ const getAllPostWithCategoryCar = async(query)=>{
     let result = [];
     allPost.forEach((element, index)=>{
       if(now <= addDays(element.dateStartPost,3)){
-        console.log(element.dateStartPost)
         result.push(element);
       }
     });
@@ -734,7 +732,7 @@ const getAllPostWithCategoryCar = async(query)=>{
       status: error.status,
     };
   }
-}
+};
 
 const getAllPostWithCategoryBDS = async(query)=>{
   // load các bài post đã được duyệt lên trang chủ không cần authen
@@ -772,7 +770,7 @@ const getAllPostWithCategoryBDS = async(query)=>{
     allPost.forEach((element, index)=>{
       if(now <= addDays(element.dateStartPost,3)){
         console.log(element.dateStartPost)
-        result.push(element);
+        
       }
     });
     let result1 = isRecent!= undefined ? allPost : result;
@@ -806,7 +804,212 @@ const getAllPostWithCategoryBDS = async(query)=>{
       status: error.status,
     };
   }
+};
+
+
+const revevueWithMonth = async (query)=>{
+  try{
+    const {year} = query;
+    let result = {
+      'One':0,
+      'Two':0,
+      'Three':0,
+      'Four':0,
+      'Five':0,
+      'Six':0,
+      'Seven':0,
+      'Eight':0,
+      'Nine':0,
+      'Ten':0,
+      'Elevent':0,
+      'Twelve':0,
+    };
+    let total = 0;
+    const revenueMonth = await Revenue.find({yearStart:year});
+    revenueMonth.forEach((element,index)=>{
+        total += element.priceAdvert;
+        if(element.monthStart===1){
+          result.One = result.One +  element.priceAdvert;
+        }
+        else if(element.monthStart===2){
+          result.Two = result.Two + element.priceAdvert;
+        }
+        else if(element.monthStart===3){
+          result.Three = result.Three + element.priceAdvert;
+        }
+        else if(element.monthStart===4){
+          result.Four = result.Four+  element.priceAdvert;
+        }
+        else if(element.monthStart===5){
+          result.Five = result.Five+ element.priceAdvert;
+        }
+        else if(element.monthStart===6){
+          result.Six = result.Six + element.priceAdvert;
+        }
+        else if(element.monthStart===7){
+          result.Seven =  result.Seven + element.priceAdvert;
+        }
+        else if(element.monthStart===8){
+          result.Eight =  result.Eight + element.priceAdvert;
+        }
+        else if(element.monthStart===9){
+          result.Nine =  result.Nine + element.priceAdvert;
+        }
+        else if(element.monthStart===10){
+          result.Ten =  result.Ten+  element.priceAdvert;
+        }
+        else if(element.monthStart===11){
+          result.Elevent =  result.Elevent + element.priceAdvert;
+        }
+        else if(element.monthStart===12){
+          result.Twelve =  result.Twelve  + element.priceAdvert;
+        }
+    });
+    if(revenueMonth){
+      return{
+        data: { 
+                total: total,
+                result: result
+              },
+        success: true,
+        message: {
+          ENG: "Get list post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const favoritePost = async(idUser,body)=>{
+  try{
+    const {idPost}=body;
+    const data = {
+      postId: idPost,
+      idUser: idUser,
+    };
+    const favoriteExist = await Favorite.findOne({ idUser: idUser, postId: idPost,});
+    if(favoriteExist!=null){
+      return {
+        data: 'data',
+        success: false,
+        message: {
+          ENG: "Favorited post Existed",
+          VN: "Đã thích bài viết",
+        },
+        status: HTTP_STATUS_CODE.CONFLICT,
+      };
+    }
+    
+    const favorite = await Favorite.create(data);
+    return {
+      data: favorite,
+      success: true,
+      message: {
+        ENG: "Favorited post Successfully",
+        VN: "Thích bài đăng thành công",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const getListFavorite = async(idUser)=>{
+  try{
+    const listFavorite = await Favorite.find({ idUser: idUser,isActive:true})
+    .populate('postId');
+    const result = [];
+    let now = new Date();
+    listFavorite.forEach((e,index)=>{
+      if(e.postId.dateEndPost >= now){
+          result.push(e);
+      }
+    });
+    if(listFavorite){
+      return{
+        data: result,
+        success: true,
+        message: {
+          ENG: "Get list favorite post successfully",
+          VN: "Lấy danh sách bài đăng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      }
+    }
+    return {
+      data:"data",
+      success:false,
+      message: {
+        ENG: "Get list favorite post fail",
+        VN: "Lấy danh sách bài đăng không thành công",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const cancelFavorite = async(idUser,body)=>{
+  try{
+    const {isActive,idFavorite}=body;
+    console.log(idUser)
+    console.log(idFavorite)
+    const update = {isActive:body.isActive};
+    const cancelFav = await Favorite.findOneAndUpdate({idUser:idUser,_id:idFavorite},update,{new:true});
+    if(!cancelFav){
+      return {
+        success: false,
+        message: {
+          ENG: "Post not found",
+          VN: "Không tìm thấy bài post",
+        },
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
+    return {
+      success: true,
+      message: {
+        ENG: "cancel favorite post successfully",
+        VN: "Hủy thích bài đăng thành công",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
 }
+
 module.exports = {
   createPost,
   deletePost,
@@ -821,5 +1024,9 @@ module.exports = {
   getAllPostWithType,
   getAllPostWithCategoryTech,
   getAllPostWithCategoryCar,
-  getAllPostWithCategoryBDS
+  getAllPostWithCategoryBDS,
+  revevueWithMonth,
+  favoritePost,
+  getListFavorite,
+  cancelFavorite,
 };
