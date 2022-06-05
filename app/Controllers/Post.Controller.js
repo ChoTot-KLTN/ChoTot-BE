@@ -14,7 +14,11 @@ const {
   getAllPostWithType,
   getAllPostWithCategoryTech,
   getAllPostWithCategoryCar,
-  getAllPostWithCategoryBDS
+  getAllPostWithCategoryBDS,
+  revevueWithMonth,
+  favoritePost,
+  getListFavorite,
+  cancelFavorite,
 } = require("../Services/Post.Service");
 
 const { createPostApartment } = require("../Services/Post_Apartment.Service");
@@ -204,6 +208,34 @@ const handleGetListPostWithCategoryBDS= async (req, res) => {
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+const handleRevenueWithMonth= async (req, res) => {
+  const result = await revevueWithMonth(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleFavoritePost = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await favoritePost(token, req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleGetListFavoritePost = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await getListFavorite(token);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+const handleCancelFavoritePost = async (req, res) => {
+  const token = req.body.token.id;
+  const result = await cancelFavorite(token, req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -228,5 +260,9 @@ module.exports = {
   handleGetListPostWithType,
   handleGetListPostWithCategory,
   handleGetListPostWithCategoryCar,
-  handleGetListPostWithCategoryBDS
+  handleGetListPostWithCategoryBDS,
+  handleRevenueWithMonth,
+  handleFavoritePost,
+  handleGetListFavoritePost,
+  handleCancelFavoritePost
 };

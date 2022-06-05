@@ -16,6 +16,7 @@ const Conversation = require("./Conversation.Model");
 const Revenue = require("./Revenue.Model");
 
 const Comments = require("./Comments.Model");
+const Favorite = require("./Favorite.Model");
 module.exports = {
   Account,
   User,
@@ -34,4 +35,5 @@ module.exports = {
   Conversation,
   Revenue,
   Comments,
+  Favorite
 };
