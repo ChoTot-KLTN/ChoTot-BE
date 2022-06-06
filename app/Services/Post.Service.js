@@ -625,7 +625,8 @@ const getAllPostWithCategoryTech = async(query)=>{
     ]);
     let result = [];
    allPost.forEach((element, index)=>{
-     if(now <= addDays(element.dateStartPost,3)){
+    let dateCompare = addDays(element.createdAt,3);
+     if(now <= dateCompare){
        result.push(element);
      }
    });
@@ -696,7 +697,8 @@ const getAllPostWithCategoryCar = async(query)=>{
     ]);
     let result = [];
     allPost.forEach((element, index)=>{
-      if(now <= addDays(element.dateStartPost,3)){
+      let dateCompare = addDays(element.createdAt,3);
+      if(now <= dateCompare){
         result.push(element);
       }
     });
@@ -768,7 +770,8 @@ const getAllPostWithCategoryBDS = async(query)=>{
     ]);
     let result = [];
     allPost.forEach((element, index)=>{
-      if(now <= addDays(element.dateStartPost,3)){
+      let dateCompare = addDays(element.createdAt,3);
+      if(now <= dateCompare){
         console.log(element.dateStartPost)
         
       }
