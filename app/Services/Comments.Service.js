@@ -111,14 +111,24 @@ const updateComments = async (commentId, body) => {
   }
 };
 
-const deleteComments = async (commentId, body) => {
+const deleteComments = async (idUser, body) => {
   try {
-    console.log(commentId, body);
-    const deleteComments = await Comments.updateOne(
-      { _id: commentId },
-      { isDeleted: true }
+    // console.log(commentId.body, body);
+    const {commentId}=body;
+    const deleteComments = await Comments.findOneAndDelete(
+      { _id: commentId,idUserComment:idUser }
     );
     // const comments = await Comments.findById(commentId);// sao
+    if(!deleteComments){
+      return {
+        success: false,
+        message: {
+          ENG: "Comments deleted fail",
+          VN: "Không thể xóa bình luận",
+        },
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      };
+    }
     return {
       success: true,
       message: {

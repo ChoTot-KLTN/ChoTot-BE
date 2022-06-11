@@ -1,26 +1,28 @@
-const { encodedToken } = require("../Middlewares/Token.Middleware");
 const { sendError, sendSuccess } = require("./Controller");
-const { updateInfo,getUserByID } = require("../Services/User.Service");
+const { createRating,
+    getRatingInfor} = require("../Services/RatingService");
 
-const handleUpdateInfo = async (req, res) => {
+const handleCreateRating = async (req, res) => {
+    //const token = req.body.token.id;
   // console.log(req.body);
-  const result = await updateInfo(req.body.token.id, req.body);
+  const result = await createRating(req.body);
   if (result.success)
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
   // return sendSuccess(res, {}, "", 200);
 };
 
-const handleGetUserInfor = async (req, res) => {
+const handleGetRatingInfor = async (req, res) => {
   // console.log(req.body);
-  const result = await getUserByID(req.query);
+  const result = await getRatingInfor(req.query);
   if (result.success)
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
   // return sendSuccess(res, {}, "", 200);
 };
+
 
 module.exports = {
-  handleUpdateInfo,
-  handleGetUserInfor,
+    handleCreateRating,
+    handleGetRatingInfor,
 };

@@ -1013,6 +1013,133 @@ const cancelFavorite = async(idUser,body)=>{
   }
 }
 
+
+const filterPost = async (query)=>{
+  try{
+    let now = new Date();
+    let {page, limit, maxPrice, minPrice, province, category, brand}=query;
+    // console.log(maxPrice+0);
+    maxPrice = ~~maxPrice || 1000000000;
+    minPrice = ~~minPrice || 0;
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+    const queryOject = {
+      $and:[ {prePrice:{$lte:maxPrice}}, {prePrice:{$gte:minPrice}}],
+      'dateEndPost':{$gte:now},
+    };
+    if (province) queryOject.province = { $regex: province, $options: "i" };
+    if (category) queryOject.onModel = { $regex: category, $options: "i" };
+
+   
+    const filter = await Post.aggregate([
+      {
+        $match:queryOject,
+      },
+      {
+        $lookup:{
+          from: category.toLowerCase()+'s',
+          localField: "on",
+          foreignField: "_id",
+          as: "post_infor",
+        }
+      },
+      {
+        $unwind: {path:"$post_infor", preserveNullAndEmptyArrays: true,},
+      },
+      {
+        $match:brand ? {"post_infor.brand":brand} :  {},
+      },
+      {
+        $skip:page*limit
+      },
+      {
+        $limit:limit
+      },
+    ]);
+    return {
+      data:filter,
+      success:true,
+      message: {
+        ENG: "filter successfully",
+        VN: "Tìm thấy sản phẩm",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    }
+
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+const filterPostBDS = async (query)=>{
+  try{
+    let now = new Date();
+    let {page, limit, maxPrice, minPrice, province, category, area, maxArea, minArea}=query;
+    // console.log(maxPrice+0);
+    maxPrice = ~~maxPrice || 1000000000;
+    minPrice = ~~minPrice || 0;
+    area = ~~area || 20;
+    maxArea = ~~maxArea || 1000;
+    minArea = ~~minArea || 20;
+    page = parseInt(query.page,10) || 0; 
+    limit = parseInt(query.limit,10) || 10;
+    const queryOject = {
+      $and:[ {prePrice:{$lte:maxPrice}}, {prePrice:{$gte:minPrice}}],
+      'dateEndPost':{$gte:now},
+
+    };
+    if (province) queryOject.province = { $regex: province, $options: "i" };
+    if (category) queryOject.onModel = { $regex: category, $options: "i" };
+
+   
+    const filter = await Post.aggregate([
+      {
+        $match:queryOject,
+      },
+      {
+        $lookup:{
+          from: category.toLowerCase()+'s',
+          localField: "on",
+          foreignField: "_id",
+          as: "post_infor",
+        }
+      },
+      {
+        $unwind: {path:"$post_infor", preserveNullAndEmptyArrays: true,},
+      },
+      {
+        $match:area ? {$and:[ {"post_infor.area":{$lte:maxArea}}, {"post_infor.area":{$gte:minArea}}]} : {},
+      },
+      {
+        $skip:page*limit
+      },
+      {
+        $limit:limit
+      },
+    ]);
+    return {
+      data:filter,
+      success:true,
+      message: {
+        ENG: "filter successfully",
+        VN: "Tìm thấy sản phẩm",
+      },
+      status: HTTP_STATUS_CODE.OK,
+    }
+
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
 module.exports = {
   createPost,
   deletePost,
@@ -1032,4 +1159,6 @@ module.exports = {
   favoritePost,
   getListFavorite,
   cancelFavorite,
+  filterPost,
+  filterPostBDS
 };

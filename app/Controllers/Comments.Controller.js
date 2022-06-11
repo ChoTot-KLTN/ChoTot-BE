@@ -31,7 +31,8 @@ const updateComments = async (req, res) => {
 
 const deleteComments = async (req, res) => {
   // console.log(req.body);
-  const result = await Comments.deleteComments(req.params.commentId);
+  const token = req.body.token.id;
+  const result = await Comments.deleteComments(token,req.body);
   if (result.success)
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);

@@ -17,7 +17,7 @@ router
   .route(`/${COMMENTS_PATH.UPDATE_COMMENTS}/:commentId`)
   .put([], controller.updateComments);
 router
-  .route(`/${COMMENTS_PATH.DELETE_COMMENTS}/:commentId`)
-  .delete([], controller.deleteComments);
+  .route(`/${COMMENTS_PATH.DELETE_COMMENTS}`)
+  .post([verifyToken], controller.deleteComments);
 
 module.exports = router;

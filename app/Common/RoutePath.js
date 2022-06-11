@@ -59,6 +59,11 @@ exports.ADMIN_PATH = {
   CHANGE_STATUS_POST: "change-status-post",
 };
 
+exports.RATING_PATH={
+  CREATERATING: "create-rating",
+  GETRATINGINFOR: "get-rating-infor",
+};
+
 exports.PREFIX_PATH = {
   ADMIN: "admin",
   AUTH: "auth",
@@ -67,4 +72,5 @@ exports.PREFIX_PATH = {
   CONVERSATION: "conversation",
   MESSAGE: "message",
   COMMENTS: "comments",
+  RATING: "rating",
 };
