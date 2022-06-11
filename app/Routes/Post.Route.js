@@ -35,5 +35,7 @@ router.route('/revenue-month').get(controller.handleRevenueWithMonth);
 router.route('/favorite').post([verifyToken],controller.handleFavoritePost); 
 router.route('/get-list-favorite').get([verifyToken],controller.handleGetListFavoritePost); 
 router.route('/cancel-favorite').put([verifyToken],controller.handleCancelFavoritePost); 
+router.route('/filter').get(controller.handleFilterPost); 
+router.route('/filter-bds').get(controller.handleFilterPostBDS); 
 
 module.exports = router;

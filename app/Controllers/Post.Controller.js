@@ -19,6 +19,8 @@ const {
   favoritePost,
   getListFavorite,
   cancelFavorite,
+  filterPost,
+  filterPostBDS,
 } = require("../Services/Post.Service");
 
 const { createPostApartment } = require("../Services/Post_Apartment.Service");
@@ -236,6 +238,19 @@ const handleCancelFavoritePost = async (req, res) => {
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+const handleFilterPost= async (req, res) => {
+  const result = await filterPost(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
+
+const handleFilterPostBDS= async (req, res) => {
+  const result = await filterPostBDS(req.query);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 module.exports = {
   handleCreatePost,
   handleDeletePost,
@@ -264,5 +279,7 @@ module.exports = {
   handleRevenueWithMonth,
   handleFavoritePost,
   handleGetListFavoritePost,
-  handleCancelFavoritePost
+  handleCancelFavoritePost,
+  handleFilterPost,
+  handleFilterPostBDS,
 };

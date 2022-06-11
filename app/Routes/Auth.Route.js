@@ -28,4 +28,5 @@ router
 router.route(`/${AUTH_PATH.FORGOT_PASSWORD}`).post([],controller.handleForgotPassword);
 router.route(`/${AUTH_PATH.SENDNEWPASS}`).post([],controller.handleSendNewPass);
 router.route(`/${AUTH_PATH.CHANGE_PASSWORD}`).post([verifyToken],controller.handleChangePassword);
+router.route('/get-user-infor').get(controllerUser.handleGetUserInfor)
 module.exports = router;
