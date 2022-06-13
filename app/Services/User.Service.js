@@ -55,13 +55,6 @@ const getUserByID = async(query)=>{
         $unwind: {path:"$user_infor", preserveNullAndEmptyArrays: true},
       },
     ]);
-    // console.log(userInfo[0].user_infor);
-    let avgRate = 0;
-    let l = userInfo[0].user_infor.count;
-    userInfo[0].user_infor.avgRate.forEach((e,index)=>{
-        avgRate = avgRate + parseInt(e,10);
-    });
-    let total = (avgRate/l).toFixed(1);
     if (!userInfo) {
       return {
         success: false,
@@ -72,19 +65,45 @@ const getUserByID = async(query)=>{
         status: HTTP_STATUS_CODE.NOT_FOUND,
       };
     }
-    return {
-      data:{
-        infor:userInfo[0],
-        totalRate: total,
-        count: l,
-      },
-      success: true,
-      message: {
-        ENG: "Get user infor successfully",
-        VN: "Lấy thông tin người dùng thành công",
-      },
-      status: HTTP_STATUS_CODE.OK,
-    };
+    let avgRate = 0;
+    let l = 0;
+    let total =0;
+    if(!userInfo[0].user_infor){
+      return {
+        data:{
+          infor:userInfo[0],
+          totalRate: total,
+          count: l ,
+        },
+        success: true,
+        message: {
+          ENG: "Get user infor successfully2",
+          VN: "Lấy thông tin người dùng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      };
+        
+    }else{
+      l = userInfo[0].user_infor.count;
+        userInfo[0].user_infor.avgRate.forEach((e,index)=>{
+          avgRate = avgRate + parseInt(e,10);
+          
+      });
+      total = (avgRate/l).toFixed(1);
+      return {
+        data:{
+          infor:userInfo[0],
+          totalRate: total,
+          count: l ,
+        },
+        success: true,
+        message: {
+          ENG: "Get user infor successfully1",
+          VN: "Lấy thông tin người dùng thành công",
+        },
+        status: HTTP_STATUS_CODE.OK,
+      };
+    }
   }catch(error){
     return {
       success: false,

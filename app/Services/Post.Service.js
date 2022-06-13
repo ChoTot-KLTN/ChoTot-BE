@@ -772,8 +772,7 @@ const getAllPostWithCategoryBDS = async(query)=>{
     allPost.forEach((element, index)=>{
       let dateCompare = addDays(element.createdAt,3);
       if(now <= dateCompare){
-        console.log(element.dateStartPost)
-        
+        result.push(element);
       }
     });
     let result1 = isRecent!= undefined ? allPost : result;
