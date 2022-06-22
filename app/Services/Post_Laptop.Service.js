@@ -53,6 +53,7 @@ const createPostLaptop = async (idUser,body) => {
           prePrice: newPostPhone.price,
           province: newPostPhone.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
         });
         // await newPostPhone.save();
         // await newPost.save();

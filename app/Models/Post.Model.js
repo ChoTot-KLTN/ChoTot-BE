@@ -46,7 +46,8 @@ const post = {
   dateEndPost: DEFAULT_MODEL.date,
   prePrice: DEFAULT_MODEL.number,
   province: DEFAULT_MODEL.string,
-  nameOfPoster: DEFAULT_MODEL.string
+  nameOfPoster: DEFAULT_MODEL.string,
+  phoneOfPoster:DEFAULT_MODEL.stringPhone,
 };
 
 module.exports = Post = mongoose.model("Post", createSchema(post));

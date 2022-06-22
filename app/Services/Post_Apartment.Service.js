@@ -62,6 +62,7 @@ const createPostApartment = async (idUser,body) => {
           prePrice: newPostApartment.price,
           province: newPostApartment.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
         });
 
         if(!newPost){

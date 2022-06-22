@@ -55,6 +55,7 @@ const createPostOffice = async (idUser,body) => {
           prePrice: newPostOffice.price,
           province: newPostOffice.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
         });
 
         // await newPostOffice.save();

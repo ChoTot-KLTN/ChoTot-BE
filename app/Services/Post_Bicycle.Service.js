@@ -50,6 +50,7 @@ const createPostBicycle = async (idUser,body) => {
           prePrice: newPostBicycle.price,
           province: newPostBicycle.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
         });
         if(!newPost){
           return {
