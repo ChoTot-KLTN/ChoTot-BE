@@ -64,6 +64,11 @@ exports.RATING_PATH={
   GETRATINGINFOR: "get-rating-infor",
 };
 
+exports.REPORT_PATH={
+  CREATEREPORT: "create-report",
+  GETREPORT:"get-report",
+};
+
 exports.PREFIX_PATH = {
   ADMIN: "admin",
   AUTH: "auth",
@@ -73,4 +78,5 @@ exports.PREFIX_PATH = {
   MESSAGE: "message",
   COMMENTS: "comments",
   RATING: "rating",
+  REPORT: "report",
 };

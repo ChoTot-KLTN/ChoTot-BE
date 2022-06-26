@@ -46,6 +46,8 @@ const createPostPhone = async (idUser,body) => {
           prePrice: newPostPhone.price,
           province: newPostPhone.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         if(!newPost){
           return {

@@ -51,6 +51,8 @@ const createPostMotorbike = async (idUser,body) => {
           prePrice: newPostMotorbike.price,
           province: newPostMotorbike.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         // await newPostMotorbike.save();
         // await newPost.save();

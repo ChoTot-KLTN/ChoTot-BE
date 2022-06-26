@@ -57,6 +57,8 @@ const createPostHouse = async (idUser,body) => {
           prePrice: newPostHouse.price,
           province: newPostHouse.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         // await newPostHouse.save();
         // await newPost.save();

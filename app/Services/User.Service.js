@@ -1,4 +1,4 @@
-const { User } = require("../Models/Index.Model");
+const { User, Post } = require("../Models/Index.Model");
 const bcrypt = require("bcrypt");
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
 const ObjectId = require('mongodb').ObjectId;
@@ -19,6 +19,14 @@ const updateInfo = async (userId, body) => {
     }
     Object.assign(user, body);
     await user.save();
+    // const posts = await Post.find({idUserPost:userId});
+    
+    // await posts.updateMany({},{nameOfPoster:body.name},{upsert:true});
+    // posts.forEach((e)=>{
+    //   e.update({nameOfPoster:body.name});
+    // })
+    await Post.updateMany({idUserPost:userId},{nameOfPoster:body.name});
+
     return {
       success: true,
       message: {

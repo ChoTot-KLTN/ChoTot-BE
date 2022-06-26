@@ -52,6 +52,8 @@ const createPostGround = async (idUser,body) => {
           prePrice: newPostGround.price,
           province: newPostGround.address.province,
           nameOfPoster: nameOfPoster.name,
+          phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         if(!newPost){
           return {

@@ -17,6 +17,7 @@ const user = {
       },
     ratings: { ...DEFAULT_MODEL.number, default: 0 },
     posts: { ...DEFAULT_MODEL.number, default: 0 },
+    avatar:{type: String, default: "nope"}
 };
 
 module.exports = User = mongoose.model("User",createSchema(user));
