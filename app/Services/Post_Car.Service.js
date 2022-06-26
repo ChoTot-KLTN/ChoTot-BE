@@ -52,6 +52,7 @@ const createPostCar = async (idUser,body) => {
           province: newPostCar.address.province,
           nameOfPoster: nameOfPoster.name,
           phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         // await newPostCar.save();
         // await newPost.save();

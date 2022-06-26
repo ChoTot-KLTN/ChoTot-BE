@@ -56,6 +56,7 @@ const createPostOffice = async (idUser,body) => {
           province: newPostOffice.address.province,
           nameOfPoster: nameOfPoster.name,
           phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
 
         // await newPostOffice.save();

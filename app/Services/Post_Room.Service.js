@@ -47,6 +47,7 @@ const createPostMotelRoom = async (idUser,body) => {
           province: newPostMotelRoom.address.province,
           nameOfPoster: nameOfPoster.name,
           phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
         // await newPostMotelRoom.save();
         // await newPost.save();

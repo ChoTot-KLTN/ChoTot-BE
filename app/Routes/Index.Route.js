@@ -12,5 +12,6 @@ router.use(`/${PREFIX_PATH.COMMENTS}`, require("./Comments.Route"));
 router.use("/payment", require("./Paypal.Route"));
 router.use("/vnpay", require("./VNPay.Route"));
 router.use(`/${PREFIX_PATH.RATING}`,require("./Rating.Route"));
+router.use(`/${PREFIX_PATH.REPORT}`,require("./ReportPost.Route"));
 
 module.exports = router;

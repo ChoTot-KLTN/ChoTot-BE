@@ -63,6 +63,7 @@ const createPostApartment = async (idUser,body) => {
           province: newPostApartment.address.province,
           nameOfPoster: nameOfPoster.name,
           phoneOfPoster: nameOfPoster.phone,
+          avatarOfPoster: nameOfPoster.avatar,
         });
 
         if(!newPost){
