@@ -25,7 +25,7 @@ const updateInfo = async (userId, body) => {
     // posts.forEach((e)=>{
     //   e.update({nameOfPoster:body.name});
     // })
-    await Post.updateMany({idUserPost:userId},{nameOfPoster:body.name});
+    await Post.updateMany({idUserPost:userId},{nameOfPoster:body.name, phoneOfPoster:body.phone, avatarOfPoster: body.avatar, province: body.address.province });
 
     return {
       success: true,

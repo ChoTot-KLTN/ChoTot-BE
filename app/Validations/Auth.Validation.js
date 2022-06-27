@@ -27,5 +27,6 @@ module.exports.schema = {
       district: Joi.string().regex(REGEX.UNICODE_STRING).allow(null),
       province: Joi.string().regex(REGEX.UNICODE_STRING).allow(null),
     }),
+    avatar: Joi.string().required(),
   }),
 };
