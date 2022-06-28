@@ -2,7 +2,7 @@
 
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
-const { Post , PostOffice } = require("../Models/Index.Model");
+const { Post , PostOffice, User } = require("../Models/Index.Model");
 
 function addDays(dateObj, numDays) {
   dateObj.setDate(dateObj.getDate() + numDays);
@@ -71,6 +71,9 @@ const createPostOffice = async (idUser,body) => {
             status: HTTP_STATUS_CODE.FORBIDDEN,
           };
         }
+        let totalPost =  nameOfPoster.posts;
+       nameOfPoster.posts = totalPost + 1;
+       await nameOfPoster.save();
         return {
           data: "data",
           success: true,

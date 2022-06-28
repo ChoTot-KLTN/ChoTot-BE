@@ -1,6 +1,6 @@
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
-const { Post, PostPhone  } = require("../Models/Index.Model");
+const { Post, PostPhone, User  } = require("../Models/Index.Model");
 
 function addDays(dateObj, numDays) {
   dateObj.setDate(dateObj.getDate() + numDays);
@@ -61,6 +61,9 @@ const createPostPhone = async (idUser,body) => {
         }
         // await newPostPhone.save();
         // await newPost.save();
+        let totalPost =  nameOfPoster.posts;
+       nameOfPoster.posts = totalPost + 1;
+       await nameOfPoster.save();
         return {
           data: "data",
           success: true,

@@ -63,6 +63,9 @@ const createPostBicycle = async (idUser,body) => {
             status: HTTP_STATUS_CODE.FORBIDDEN,
           };
         }
+        let totalPost =  nameOfPoster.posts;
+       nameOfPoster.posts = totalPost + 1;
+       await nameOfPoster.save();
         return {
           data: "data",
           success: true,

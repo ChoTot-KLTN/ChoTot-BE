@@ -48,7 +48,8 @@ const post = {
   province: DEFAULT_MODEL.string,
   nameOfPoster: DEFAULT_MODEL.string,
   phoneOfPoster:DEFAULT_MODEL.stringPhone,
-  avatarOfPoster:{type: String, default: "nope"}
+  avatarOfPoster:{type: String, default: "nope"},
+  numberOfReport: DEFAULT_MODEL.number
 };
 
 module.exports = Post = mongoose.model("Post", createSchema(post));

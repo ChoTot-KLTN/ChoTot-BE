@@ -1,6 +1,6 @@
 
 const { HTTP_STATUS_CODE, ROLE, AUTH_TYPE } = require("../Common/Constants");
-const { Post, PostMotelRoom  } = require("../Models/Index.Model");
+const { Post, PostMotelRoom, User  } = require("../Models/Index.Model");
 
 function addDays(dateObj, numDays) {
   dateObj.setDate(dateObj.getDate() + numDays);
@@ -61,6 +61,9 @@ const createPostMotelRoom = async (idUser,body) => {
             status: HTTP_STATUS_CODE.FORBIDDEN,
           };
         }
+        let totalPost =  nameOfPoster.posts;
+       nameOfPoster.posts = totalPost + 1;
+       await nameOfPoster.save();
         return {
           data: "data",
           success: true,

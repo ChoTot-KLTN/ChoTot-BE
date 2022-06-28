@@ -27,6 +27,10 @@ const createReport = async(body) =>{
             avatar:avatar
         });
         const newReport = await Report.create(newReportData);
+        const updatePost = await Post.findOne({_id:idPost});
+        let totalReport = updatePost.numberOfReport;
+        updatePost.numberOfReport = totalReport + 1;
+        await updatePost.save();
         return {
             data: newReport,
             success: true,
