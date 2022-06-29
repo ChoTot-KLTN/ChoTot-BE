@@ -8,6 +8,8 @@ exports.AUTH_PATH = {
   GETOTP: "get-otp",
   UPDATE_INFO: "update-info",
   SENDNEWPASS: "send-password",
+  LOGINWITHPHONE: "login-phone",
+  LOGINWITHPHONEOTP: "login-phone-otp",
 };
 
 exports.POST_PATH = {

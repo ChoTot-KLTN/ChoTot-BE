@@ -7,7 +7,9 @@ const {register,
       getAuth,
       forgotPassword,
       sendNewPassword,
-      changePassword } = require("../Services/Auth.Service");
+      changePassword,
+      loginWithPhone,
+      loginPhoneOTP } = require("../Services/Auth.Service");
 
 const handleRegister = async (req, res) => {
     const result = await register(req.body);
@@ -82,6 +84,33 @@ const handleChangePassword = async (req,res)=>{
   return sendError(res, result.message, result.status);
 };
 
+const handleLoginWithPhone = async (req,res)=>{
+  const result = await loginWithPhone(req.body);
+  if(result.success){
+    return sendSuccess(res, result.data, result.message, result.status);
+  }
+  return sendError(res, result.message, result.status);
+  
+}
+
+const handleLoginWithPhoneOTP = async (req,res)=>{
+  
+  const result = await loginPhoneOTP(req.body);
+  if(result.success){
+    const accessToken = encodedToken(result.data.idUser);
+    const role = result.data.role;
+    res.setHeader("Authorization", accessToken);
+    return sendSuccess(
+      res,
+      { accessToken: accessToken, role: role },
+      result.message,
+      result.status
+    );
+  }
+  return sendError(res, result.message, result.status);
+}
+
+
 module.exports = {
     handleRegister,
     handleLogin,
@@ -90,5 +119,7 @@ module.exports = {
     handleGetAuth,
     handleForgotPassword,
     handleSendNewPass,
-    handleChangePassword
+    handleChangePassword,
+    handleLoginWithPhone,
+    handleLoginWithPhoneOTP
 }
