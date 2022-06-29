@@ -377,6 +377,98 @@ const changePassword = async (idUser, oldPassword, newPassword)=>{
   }
 }
 
+const loginWithPhone = async (body) =>{
+  try{
+    const {phone} = body;
+    const checkUserExist = await User.findOne({phone:phone });
+    if(checkUserExist!=null || checkUserExist!= undefined){
+      const otp1 = await generateString(4, false);
+      const getAccount = await Account.findOne({idUser: checkUserExist._id});
+      getAccount.otp = otp1;
+      await getAccount.save();
+      data = {
+        message: `Mã otp của bạn là ${otp1}`,
+        phoneNumber:phone
+      };
+      await sendSMS(data);
+      return {
+        success:true,
+        data:checkUserExist,
+        message:{
+          ENG:"get user success",
+          VN:"data user",
+        },
+        status:HTTP_STATUS_CODE.OK
+      };
+    }
+    const otp2 = await generateString(4, false);
+    return {
+      success: false,
+      message: {
+        ENG: "can't find user",
+        VN: "Không tìm được user",
+      },
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
+
+
+const loginPhoneOTP = async(body)=>{
+  try{
+    const {otp, phone} = body;
+    const checkUserExist = await User.findOne({phone:phone });
+    if(checkUserExist!=null || checkUserExist!= undefined){
+      const getAccount = await Account.findOne({idUser: checkUserExist._id}); 
+      if(getAccount.otp === otp){
+        return {
+          message: {
+            ENG: "Login Successfully",
+            VN: "Đăng nhập thành công",
+          },
+          data: {
+            idUser: getAccount.idUser,
+            role: getAccount.role,
+          },
+          success: true,
+          status: HTTP_STATUS_CODE.OK,
+        };
+      }    
+      return {
+        success:false,
+        data:"data",
+        message:{
+          ENG:"OTP wrong",
+          VN:"Mã OTP bị sai",
+        },
+        status:HTTP_STATUS_CODE.NOT_FOUND
+      };
+    }
+    return {
+      success:false,
+      data:"data",
+      message:{
+        ENG:"OTP wrong 1 ",
+        VN:"Mã OTP bị sai 1",
+      },
+      status:HTTP_STATUS_CODE.NOT_FOUND
+    };
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+}
+
 module.exports = {
   register,
   login,
@@ -385,5 +477,7 @@ module.exports = {
   getAuth,
   forgotPassword,
   sendNewPassword,
-  changePassword
+  changePassword,
+  loginWithPhone,
+  loginPhoneOTP
 };

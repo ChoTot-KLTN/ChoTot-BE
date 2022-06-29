@@ -29,4 +29,7 @@ router.route(`/${AUTH_PATH.FORGOT_PASSWORD}`).post([],controller.handleForgotPas
 router.route(`/${AUTH_PATH.SENDNEWPASS}`).post([],controller.handleSendNewPass);
 router.route(`/${AUTH_PATH.CHANGE_PASSWORD}`).post([verifyToken],controller.handleChangePassword);
 router.route('/get-user-infor').get(controllerUser.handleGetUserInfor)
+router.route(`/${AUTH_PATH.LOGINWITHPHONE}`).post([], controller.handleLoginWithPhone);
+router.route(`/${AUTH_PATH.LOGINWITHPHONEOTP}`).post([], controller.handleLoginWithPhoneOTP);
+
 module.exports = router;
