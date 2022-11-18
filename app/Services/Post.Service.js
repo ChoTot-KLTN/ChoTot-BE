@@ -542,6 +542,58 @@ const priorityPost = async (req,idPoster,body)=>{
   }
 };
 
+const paymentKVStore = async (req,body)=>{
+  try{
+    const {idUser,prices,nameOfUser} = body;
+    
+
+    console.log("priceAdvert: ", prices);
+    console.log("Name: ", nameOfUser,idUser );
+    const transactionsInfo = {
+      idUser: idUser,
+      typeOrders: "payment",
+      amount: `${~~prices}`,
+      bankCode: "NCB",
+      orderDescription: "Thanh toan hoa don",
+      language: "vn",
+      typeCart: 'CLIENT',
+      fullName: nameOfUser,
+    };
+    
+    const resultPayment = await payment(
+      req,
+      transactionsInfo,
+    );
+    if (resultPayment.success) {
+      return{
+        success:true,
+        message:{
+          END:"Payment successful",
+          VN:"Thanh toán thành công",
+        },
+        data:resultPayment.data.url,
+        status: HTTP_STATUS_CODE.OK,
+      }; 
+    } else {
+      return{
+        success:false,
+        message:{
+          END:"payment fail",
+          VN:"Thanh toán thất bại",
+        },
+        data:resultPayment.data.url,
+        status:HTTP_STATUS_CODE.FORBIDDEN,
+      }; 
+    }
+  }catch(error){
+    return {
+      success: false,
+      message: error.message,
+      status: error.status,
+    };
+  }
+};
+
 const getAllPostWithType = async(query)=>{
   // load các bài post đã được duyệt lên trang chủ không cần authen
   try{
@@ -1159,5 +1211,6 @@ module.exports = {
   getListFavorite,
   cancelFavorite,
   filterPost,
-  filterPostBDS
+  filterPostBDS,
+  paymentKVStore,
 };

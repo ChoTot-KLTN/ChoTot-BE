@@ -21,6 +21,7 @@ const {
   cancelFavorite,
   filterPost,
   filterPostBDS,
+  paymentKVStore,
 } = require("../Services/Post.Service");
 
 const { createPostApartment } = require("../Services/Post_Apartment.Service");
@@ -185,6 +186,12 @@ const handlePriorityPost = async (req, res) => {
     return sendSuccess(res, result.data, result.message, result.status);
   return sendError(res, result.message, result.status);
 };
+const handlePaymentKVStore = async (req, res) => {
+  const result = await paymentKVStore(req, req.body);
+  if (result.success)
+    return sendSuccess(res, result.data, result.message, result.status);
+  return sendError(res, result.message, result.status);
+};
 
 const handleGetListPostWithType= async (req, res) => {
   const result = await getAllPostWithType(req.query);
@@ -282,4 +289,5 @@ module.exports = {
   handleCancelFavoritePost,
   handleFilterPost,
   handleFilterPostBDS,
+  handlePaymentKVStore,
 };

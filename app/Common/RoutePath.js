@@ -37,6 +37,7 @@ exports.POST_PATH = {
   GET_LIST_POST_CATEGORYTECH:"get-list-post-categorytech",
   GET_LIST_POST_CATEGORYCAR:"get-list-post-categorycar",
   GET_LIST_POST_CATEGORYBDS:"get-list-post-categorybds",
+  PAYMENT_KV: 'payment-kv'
 };
 
 exports.CONVERSATION_PATH = {
