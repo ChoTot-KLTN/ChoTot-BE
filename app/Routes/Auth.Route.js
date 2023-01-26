@@ -6,7 +6,6 @@ const { verifyToken } = require("../Middlewares/Token.Middleware");
 const router = express.Router();
 const { schema } = require("../Validations/Auth.Validation");
 const { validateBody } = require("../Validations/Validation");
-
 router
   .route(`/${AUTH_PATH.REGISTER}`)
   .post([validateBody(schema.register)], controller.handleRegister);
